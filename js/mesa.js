@@ -1,7 +1,7 @@
 
 var camera, scene, renderer, material ,top_right_rot, center_rot, rot_lar;
 
-var car, letter=0;
+var car, gas = false, left = false, right = false, back = false;
 
 function addMainChassis(obj, x, y, z){
   'use strict';
@@ -48,7 +48,7 @@ function addAxis(obj, x, y, z){
 function createCar(x, y, z){
   'use strict';
   car = new THREE.Object3D();
-  car.userData = {velX: 0, velY: 0, acelX: 0, acelY: 0, step: 0, lastStep: 0};
+  car.userData = {velX: 0, velZ: 0, acel:0, vel: 0, step: 0, lastStep: 0};
 
   material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:true});
 
@@ -259,34 +259,28 @@ function init(){
 function animate() {
   'use strict';
   car.userData.step += 0.04;
-  switch (letter) {
-    case 87:
-      car.userData.velX += 0.01;
-      break;
-    case 65:
-      car.userData.velY -= 0.01;
-      break;
-    case 68:
-      car.userData.velY += 0.01;
-      break;
-    case 83:
-      car.userData.velX -= 0.005;
-      break;
-    default:
-      car.userData.velX *= 0.8;
-      car.userData.velY *= 0.8;
-  }
-  //letter = 0;
-  if(car.userData.velX > 0.8)
-    car.userData.velX = 0.8;
-  if(car.userData.velY > 0.8)
-    car.userData.velY = 0.8;
-  if(car.userData.velX < -0.3)
-    car.userData.velX = -0.3;
-  if(car.userData.velY < -0.8)
-    car.userData.velY = -0.8;
+  
+  if(gas)
+	car.userData.vel += 0.01;
+  else if(back)
+    car.userData.vel -= 0.005;
+  else
+	car.userData.vel *= 0.9;
+	
+  if(left)
+	car.rotation.y += 0.05;
+  if(right)
+	car.rotation.y -= 0.05;
+
+  if(car.userData.vel>0.5)
+	car.userData.vel=0.5;
+  if(car.userData.vel<-0.2)
+	car.userData.vel=-0.2;
+  car.userData.velX = car.userData.vel*Math.cos(car.rotation.y);
+  car.userData.velZ = -car.userData.vel*Math.sin(car.rotation.y);
+  
   car.position.x += car.userData.velX;
-  car.position.z += car.userData.velY;
+  car.position.z += car.userData.velZ;
 
 
   render();
@@ -297,10 +291,36 @@ function animate() {
 
 function onKeyDown(e) {
     'use strict';
-    letter = e.keyCode;
+    switch (e.keyCode) {
+		case 87:  //w
+		  gas = true;
+		  break; 
+		case 65:  //a
+		  left = true;
+		  break;
+		case 68:  //d
+		  right = true;
+		  break;
+		case 83:  //s
+		  back = true;
+		  break;
+	}
 }
 
 function onKeyUp(e){
   'use strict';
-  letter = 0;
+  switch (e.keyCode) {
+		case 87:  //w
+		  gas = false;
+		  break; 
+		case 65:  //a
+		  left = false;
+		  break;
+		case 68:  //d
+		  right = false;
+		  break;
+		case 83:  //s
+		  back = false;
+		  break;
+	}
 }
