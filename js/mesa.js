@@ -1,7 +1,9 @@
 
 var camera, scene, renderer, material ,top_right_rot, center_rot, rot_lar;
 
-var car, gas = false, left = false, right = false, back = false;
+var car, gas = false, left = false, right = false, back = false, cameraViewCar = false;
+
+var clock = new THREE.Clock;
 
 function addMainChassis(obj, x, y, z){
   'use strict';
@@ -258,35 +260,48 @@ function init(){
 
 function animate() {
   'use strict';
-  car.userData.step += 0.04;
-  
+  var elapsedTime = clock.getDelta ();
+
+  //console.log(car.userData.step);
+
   if(gas)
-	car.userData.vel += 0.01;
+	car.userData.vel += 1;
   else if(back)
-    car.userData.vel -= 0.005;
+    car.userData.vel -= 0.5;
   else
 	car.userData.vel *= 0.9;
-	
-  if(left)
-	car.rotation.y += 0.05;
-  if(right)
-	car.rotation.y -= 0.05;
 
-  if(car.userData.vel>0.5)
-	car.userData.vel=0.5;
-  if(car.userData.vel<-0.2)
-	car.userData.vel=-0.2;
+  if(left)
+	car.rotation.y += 0.15;
+  if(right)
+	car.rotation.y -= 0.15;
+
+  if(car.userData.vel>30)
+	car.userData.vel=30;
+  if(car.userData.vel<-10)
+	car.userData.vel=-10;
   car.userData.velX = car.userData.vel*Math.cos(car.rotation.y);
   car.userData.velZ = -car.userData.vel*Math.sin(car.rotation.y);
-  
-  car.position.x += car.userData.velX;
-  car.position.z += car.userData.velZ;
 
+  car.position.x += car.userData.velX*elapsedTime;
+  car.position.z += car.userData.velZ*elapsedTime;
+
+  if(cameraViewCar){
+    camera.position.x = car.position.x-(10*Math.cos(car.rotation.y));
+    camera.position.y = 10;
+    camera.position.z = car.position.z+(10*Math.sin(car.rotation.y));
+    camera.lookAt(car.position);
+  }
+  else{
+    camera.position.x = 0;
+    camera.position.y = 50;
+    camera.position.z = 0;
+    camera.lookAt(scene.position);
+  }
 
   render();
 
-  requestAnimationFrame(animate);
-
+  requestAnimationFrame( animate );
 }
 
 function onKeyDown(e) {
@@ -294,7 +309,7 @@ function onKeyDown(e) {
     switch (e.keyCode) {
 		case 87:  //w
 		  gas = true;
-		  break; 
+		  break;
 		case 65:  //a
 		  left = true;
 		  break;
@@ -312,7 +327,7 @@ function onKeyUp(e){
   switch (e.keyCode) {
 		case 87:  //w
 		  gas = false;
-		  break; 
+		  break;
 		case 65:  //a
 		  left = false;
 		  break;
@@ -322,5 +337,8 @@ function onKeyUp(e){
 		case 83:  //s
 		  back = false;
 		  break;
+    case 67: //c
+      cameraViewCar = !cameraViewCar;
+      break;
 	}
 }
