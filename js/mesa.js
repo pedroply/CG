@@ -1,5 +1,5 @@
 
-var camera, scene, renderer, material ,top_right_rot, center_rot, rot_lar;
+var camera, scene, renderer, material;
 
 var car, gas = false, left = false, right = false, back = false, cameraViewCar = false;
 
@@ -8,6 +8,7 @@ var clock = new THREE.Clock;
 function addMainChassis(obj, x, y, z){
   'use strict';
   var geometry = new THREE.CubeGeometry(6, 1, 3);
+  material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:false});
   var mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x,y,z);
   obj.add(mesh);
@@ -16,6 +17,7 @@ function addMainChassis(obj, x, y, z){
 function addCockpit(obj, x, y, z){
   'use strict';
   var geometry = new THREE.CubeGeometry(3, 1, 3);
+  material = new THREE.MeshBasicMaterial({color: 0xff5520, wireframe:false});
   var mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x,y,z);
   obj.add(mesh);
@@ -24,6 +26,7 @@ function addCockpit(obj, x, y, z){
 function addWheel(obj, x, y, z){
   'use strict';
   var geometry = new THREE.TorusGeometry( 0.5, 0.2, 16, 50);
+  material = new THREE.MeshBasicMaterial({color: 0x000000, wireframe:false});
   var torus = new THREE.Mesh( geometry, material );
   torus.position.set(x,y,z);
   obj.add(torus);
@@ -32,6 +35,7 @@ function addWheel(obj, x, y, z){
 function addLights(obj, x, y, z){
   'use strict';
   var geometry = new THREE.CylinderGeometry( 0.2, 0.1, 0.1, 32 );
+  material = new THREE.MeshBasicMaterial({color: 0xffff00, wireframe:false});
   var cylinder = new THREE.Mesh( geometry, material );
   cylinder.rotation.set(0,0,Math.PI/2);
   cylinder.position.set(x,y,z);
@@ -49,10 +53,12 @@ function addAxis(obj, x, y, z){
 
 function createCar(x, y, z){
   'use strict';
+
   car = new THREE.Object3D();
   car.userData = {velX: 0, velZ: 0, acel:0, vel: 0, step: 0, lastStep: 0};
+  car.add(new THREE.AxisHelper(10));
 
-  material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:true});
+  material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
 
   addMainChassis(car, 0, 1, 0);
   addCockpit(car, -0.6, 2, 0);
@@ -75,7 +81,7 @@ function createCar(x, y, z){
 
 function addTableTop(obj, x, y, z){
   'use strict';
-  var geometry = new THREE.CubeGeometry(70, 0, 60);
+  var geometry = new THREE.CubeGeometry(90, 0, 80);
   var mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x,y,z);
   obj.add(mesh);
@@ -86,7 +92,7 @@ function addTableTop(obj, x, y, z){
 function createTable(x, y, z){
   'use strict';
   var table = new THREE.Object3D();
-  material = new THREE.MeshBasicMaterial({color: 0x666666, wireframe:true});
+  material = new THREE.MeshBasicMaterial({color: 0x056C24, wireframe:false});
 
   addTableTop(table, 0, 0, 0);
 
@@ -120,18 +126,16 @@ function addPeLaranja(obj, x, y, z){
   obj.add(pe);
 }
 
-function createLaranja(x,y,z){
+function createLaranja(x,y,z,rot_z,rot_y){
   'use strict';
   var geometry = new THREE.SphereGeometry( 5, 16, 16 );
   material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
   var laranja = new THREE.Mesh( geometry, material );
-  if (rot_lar == 1){
-    laranja.rotation.z = Math.PI / 2.;
-    laranja.rotation.y = -2 * Math.PI / 3.;
+  if (rot_z != 0){
+    laranja.rotation.z = Math.PI / rot_z;
   }
-  if (rot_lar == 2){
-    laranja.rotation.z = Math.PI / 3;
-    laranja.rotation.y = Math.PI / 3;
+  if (rot_y != 0){
+    laranja.rotation.y =  Math.PI / rot_y;
   }
 
   addPeLaranja(laranja, 0,0,0);
@@ -139,14 +143,13 @@ function createLaranja(x,y,z){
   laranja.position.x = x;
   laranja.position.y = y;
   laranja.position.z = z;
-  rot_lar = 0;
   scene.add( laranja );
 
 }
 
 function createBorder(x, y, z){
   'use strict';
-  var geometry = new THREE.TorusGeometry(1, 0.3, 7, 100);
+  var geometry = new THREE.TorusGeometry(1, 0.3, 5, 15);
   material = new THREE.MeshBasicMaterial({color: 0xe5a734, wireframe:false});
   var torus = new THREE.Mesh(geometry, material);
   torus.position.set(x,y,z);
@@ -155,22 +158,18 @@ function createBorder(x, y, z){
 
 }
 
-function createButter(x,y,z){
+function createButter(x,y,z,rot){
   'use strict';
   var geometry = new THREE.CubeGeometry(3, 2, 7);
   material = new THREE.MeshBasicMaterial({color: 0xffd633, wireframe:false});
   var butter = new THREE.Mesh(geometry, material);
-  if (top_right_rot == 1){
-    butter.rotation.y = Math.PI / 3;
+  if (rot != 0){
+    butter.rotation.y = Math.PI / rot;
   }
-  if (center_rot == 1){
-    butter.rotation.y = Math.PI / 2;
-  }
+
   butter.position.x = x;
   butter.position.y = y;
   butter.position.z = z;
-  center_rot = 0;
-  top_right_rot = 0;
   scene.add(butter);
 
 }
@@ -184,19 +183,15 @@ function createScene(){
   createTable(0,0,0);
   createCar(0, 0, 0);
 
-  rot_lar = 1;
-  createLaranja(6,5,-2);
-  rot_lar = 2;
-  createLaranja(-6,5,-6);
-  createLaranja(-5,5,7);
+  createLaranja(6,5,-2,2,3);
+  createLaranja(-6,5,-6,3,-3);
+  createLaranja(-5,5,7,0,0);
 
-  createButter(18, 1, 13);
-  center_rot = 1;
-  createButter(-10, 1, 18.5);
-  createButter(-24, 1, 0);
-  createButter(0, 1, -24);
-  top_right_rot = 1;
-  createButter(24, 1, -20);
+  createButter(18, 1, 13, 0);
+  createButter(-10, 1, 18.5, 2);
+  createButter(-24, 1, 0, 0);
+  createButter(0, 1, -24, 0);
+  createButter(24, 1, -20, 3);
 
   createBorder(-28,0.25,-26);
   createBorder(28,0.25,-26);
@@ -219,7 +214,8 @@ function createScene(){
 
 function createCamera(){
   'use strict';
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+  //camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+  camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000 );
   camera.position.x = 0;
   camera.position.y = 50;
   camera.position.z = 0;
@@ -260,6 +256,7 @@ function init(){
 
 function animate() {
   'use strict';
+  var Vet = [10,0,0];
   var elapsedTime = clock.getDelta ();
 
   //console.log(car.userData.step);
@@ -269,17 +266,18 @@ function animate() {
   else if(back)
     car.userData.vel -= 0.5;
   else
-	car.userData.vel *= 0.9;
+	  car.userData.vel *= 0.9;
 
   if(left)
-	car.rotation.y += 0.15;
+	  car.rotation.y += 5*elapsedTime;
+
   if(right)
-	car.rotation.y -= 0.15;
+	  car.rotation.y -= 5*elapsedTime;
 
   if(car.userData.vel>30)
-	car.userData.vel=30;
+	  car.userData.vel=30;
   if(car.userData.vel<-10)
-	car.userData.vel=-10;
+	  car.userData.vel=-10;
   car.userData.velX = car.userData.vel*Math.cos(car.rotation.y);
   car.userData.velZ = -car.userData.vel*Math.sin(car.rotation.y);
 
@@ -307,16 +305,16 @@ function animate() {
 function onKeyDown(e) {
     'use strict';
     switch (e.keyCode) {
-		case 87:  //w
+		case 38:  //cima seta
 		  gas = true;
 		  break;
-		case 65:  //a
+		case 37:  //esquerda seta
 		  left = true;
 		  break;
-		case 68:  //d
+		case 39:  //direita seta
 		  right = true;
 		  break;
-		case 83:  //s
+		case 40:  //baixo seta
 		  back = true;
 		  break;
 	}
@@ -325,20 +323,27 @@ function onKeyDown(e) {
 function onKeyUp(e){
   'use strict';
   switch (e.keyCode) {
-		case 87:  //w
+		case 38:  //cima seta
 		  gas = false;
 		  break;
-		case 65:  //a
+		case 37:  //esquerda seta
 		  left = false;
 		  break;
-		case 68:  //d
+		case 39:  //direita seta
 		  right = false;
 		  break;
-		case 83:  //s
+		case 40:  //baixo seta
 		  back = false;
 		  break;
     case 67: //c
       cameraViewCar = !cameraViewCar;
+      break;
+    case 65: //a
+      scene.traverse(function (node){
+        if(node instanceof THREE.Mesh) {
+          node.material.wireframe = !node.material.wireframe;
+        }
+      })
       break;
 	}
 }
