@@ -149,13 +149,53 @@ function createLaranja(x,y,z,rot_z,rot_y){
 
 function createBorder(x, y, z){
   'use strict';
-  var geometry = new THREE.TorusGeometry(1, 0.3, 5, 15);
+  var geometry = new THREE.TorusGeometry(1, 0.3, 5, 10);
   material = new THREE.MeshBasicMaterial({color: 0xe5a734, wireframe:false});
   var torus = new THREE.Mesh(geometry, material);
   torus.position.set(x,y,z);
   torus.rotation.x = Math.PI / 2;
   scene.add(torus);
 
+}
+
+function createInnerBorder(num, spacing, starting){
+	var inner;
+	for (inner = 0; inner <= starting && num > 0; inner += spacing){
+      createBorder(inner, 0.25, starting);
+      createBorder(inner, 0.25, -starting);
+      if (inner != 0){
+	      createBorder(-inner, 0.25, starting);
+	      createBorder(-inner, 0.25, -starting);
+	      createBorder(-starting, 0.25, -inner);
+	      createBorder(starting, 0.25, -inner);
+	      num = num - 2;
+	  }
+	  else{
+	  	num--;
+	  }
+	  createBorder(-starting, 0.25, inner);
+      createBorder(starting, 0.25, inner);
+  }
+}
+
+function createOutterBorder(num, spacing, starting){
+	var outter;
+	for (outter = 0; outter <= starting && num > 0; outter += spacing){
+      createBorder(outter, 0.25, starting);
+      createBorder(outter, 0.25, -starting);
+      if (outter != 0){
+	      createBorder(-outter, 0.25, starting);
+	      createBorder(-outter, 0.25, -starting);
+	      createBorder(-starting, 0.25, -outter);
+	      createBorder(starting, 0.25, -outter);
+	      num = num - 2;
+	  }
+	  else{
+	  	num--;
+	  }
+	  createBorder(-starting, 0.25, outter);
+      createBorder(starting, 0.25, outter);
+  }
 }
 
 function createButter(x,y,z,rot){
@@ -171,7 +211,6 @@ function createButter(x,y,z,rot){
   butter.position.y = y;
   butter.position.z = z;
   scene.add(butter);
-
 }
 
 function createScene(){
@@ -189,27 +228,12 @@ function createScene(){
 
   createButter(18, 1, 13, 0);
   createButter(-10, 1, 18.5, 2);
-  createButter(-24, 1, 0, 0);
-  createButter(0, 1, -24, 0);
-  createButter(24, 1, -20, 3);
+  createButter(-28, 1, 0, 0);
+  createButter(0, 1, -30, 0);
+  createButter(27, 1, -23, 3);
 
-  createBorder(-28,0.25,-26);
-  createBorder(28,0.25,-26);
-  createBorder(-28,0.25,26);
-  createBorder(28,0.25,26);
-
-  for (inner = -10.5; inner <= 10.5; inner += 3.5){
-      createBorder(14, 0.25, inner);
-      createBorder(-14, 0.25, inner);
-      createBorder(inner, 0.25, 12);
-      createBorder(inner, 0.25, -12);
-  }
-  for (outter = -24.5; outter <= 24.5; outter += 3.5){
-      createBorder(outter, 0.25, 26);
-      createBorder(outter, 0.25, -26);
-      createBorder(31, 0.25, outter);
-      createBorder(-31, 0.25, outter);
-  }
+  createInnerBorder(7, 3.5, 13);  //num torus, espacamento entre torus, distancia limite
+  createOutterBorder(19, 3.5, 35); //num tem de ser impar, conta com o criado no 0 + o gerado acima e abaixo
 }
 
 function createCamera(){
@@ -230,7 +254,14 @@ function onResize(){
     camera.aspect = renderer.getSize().width / renderer.getSize().height;
     camera.updateProjectionMatrix();
   }
-  render();
+  /*renderer.setSize(window.innerWidth, window.innerHeight);
+  if (window.innerHeight > 0 && window.innerWidth > 0){
+  	camera.left = renderer.getSize().width/-5;
+  	camera.right = renderer.getSize().width/5;
+  	camera.top = renderer.getSize().height/5;
+  	camera.bottom = renderer.getSize().height/-5;
+  	camera.updateProjectionMatrix();
+  }*/
 }
 
 function render(){
@@ -248,7 +279,7 @@ function init(){
   createCamera();
 
 
-  window.addEventListener("resize", onResize);
+  window.addEventListener('resize', onResize);
 
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
