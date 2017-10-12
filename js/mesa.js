@@ -119,7 +119,7 @@ function addPeLaranja(obj, x, y, z){
   //var mesh = new THREE.Mesh(geometry, material);
   material = new THREE.MeshBasicMaterial( {color: 0x331900, wireframe: false} );
   var pe = new THREE.Mesh( geometry, material );
-  pe.position.set(x,y + 6.5,z);
+  pe.position.set(x,y + 4,z);
 
   addFolhaLaranja(pe, 0,0,0);
 
@@ -128,7 +128,7 @@ function addPeLaranja(obj, x, y, z){
 
 function createLaranja(x,y,z,rot_z,rot_y){
   'use strict';
-  var geometry = new THREE.SphereGeometry( 5, 16, 16 );
+  var geometry = new THREE.SphereGeometry( 3, 15, 16 );
   material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
   var laranja = new THREE.Mesh( geometry, material );
   if (rot_z != 0){
@@ -138,11 +138,10 @@ function createLaranja(x,y,z,rot_z,rot_y){
     laranja.rotation.y =  Math.PI / rot_y;
   }
 
-  addPeLaranja(laranja, 0,0,0);
-
   laranja.position.x = x;
   laranja.position.y = y;
   laranja.position.z = z;
+  addPeLaranja(laranja, 0,0,0);
   scene.add( laranja );
 
 }
@@ -238,7 +237,7 @@ function createScene(){
 
 function createCamera(){
   'use strict';
-  //camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 1000);
+  //camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
   camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000 );
   camera.position.x = 0;
   camera.position.y = 50;
