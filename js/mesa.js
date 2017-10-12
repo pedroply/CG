@@ -1,5 +1,5 @@
 
-var camera, scene, renderer, material;
+var camera, scene, renderer, material, aspectratio, velocidade,vel;
 
 var car, gas = false, left = false, right = false, back = false, cameraViewCar = false;
 
@@ -53,13 +53,12 @@ function addAxis(obj, x, y, z){
 
 function createCar(x, y, z){
   'use strict';
-
   car = new THREE.Object3D();
-  car.userData = {velX: 0, velZ: 0, acel:0, vel: 0, step: 0, lastStep: 0};
   car.add(new THREE.AxisHelper(10));
-
+  car.velocidade = new THREE.Vector3(0,0,0);
+  car.vel_inst = 0;
   material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
-
+  vel = 0;
   addMainChassis(car, 0, 1, 0);
   addCockpit(car, -0.6, 2, 0);
   addWheel(car, 2, 0.5, 1.6);
@@ -238,7 +237,7 @@ function createScene(){
 function createCamera(){
   'use strict';
   //camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-  camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000 );
+  camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000);
   camera.position.x = 0;
   camera.position.y = 50;
   camera.position.z = 0;
@@ -248,19 +247,29 @@ function createCamera(){
 
 function onResize(){
   'use strict';
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  /*renderer.setSize(window.innerWidth, window.innerHeight);
   if (window.innerHeight > 0 && window.innerWidth > 0){
     camera.aspect = renderer.getSize().width / renderer.getSize().height;
     camera.updateProjectionMatrix();
-  }
+  }*/
   /*renderer.setSize(window.innerWidth, window.innerHeight);
   if (window.innerHeight > 0 && window.innerWidth > 0){
   	camera.left = renderer.getSize().width/-5;
   	camera.right = renderer.getSize().width/5;
   	camera.top = renderer.getSize().height/5;
   	camera.bottom = renderer.getSize().height/-5;
-  	camera.updateProjectionMatrix();
-  }*/
+  	console.log(camera.left, camera.right, camera.top, camera.bottom);
+  }
+  camera.updateProjectionMatrix();*/
+  var new_height = window.innerWidth / aspectratio;
+    if (new_height <= window.innerHeight ) {
+        camera.aspect = aspectratio;
+        renderer.setSize( window.innerWidth, new_height );
+    } else {
+        camera.aspect = 1/aspectratio;
+        renderer.setSize( window.innerHeight * aspectratio, window.innerHeight );
+    }
+    camera.updateProjectionMatrix();
 }
 
 function render(){
@@ -272,6 +281,7 @@ function init(){
   'use strict';
   renderer = new THREE.WebGLRenderer({antialias: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
+  aspectratio = window.innerWidth / window.innerHeight;
   document.body.appendChild(renderer.domElement);
 
   createScene();
@@ -286,33 +296,33 @@ function init(){
 
 function animate() {
   'use strict';
-  var Vet = [10,0,0];
   var elapsedTime = clock.getDelta ();
 
   //console.log(car.userData.step);
 
   if(gas)
-	car.userData.vel += 1;
+	vel += 1;
   else if(back)
-    car.userData.vel -= 0.5;
+    vel -= 0.5;
   else
-	  car.userData.vel *= 0.9;
+	 vel *= 0.9;
 
-  if(left)
+  if(left){
 	  car.rotation.y += 5*elapsedTime;
+  }
 
-  if(right)
-	  car.rotation.y -= 5*elapsedTime;
+  if(right){
+  	car.rotation.y -= 5*elapsedTime;
+  }
 
-  if(car.userData.vel>30)
-	  car.userData.vel=30;
-  if(car.userData.vel<-10)
-	  car.userData.vel=-10;
-  car.userData.velX = car.userData.vel*Math.cos(car.rotation.y);
-  car.userData.velZ = -car.userData.vel*Math.sin(car.rotation.y);
-
-  car.position.x += car.userData.velX*elapsedTime;
-  car.position.z += car.userData.velZ*elapsedTime;
+  if(vel>30)
+	  vel=30;
+  if(vel<-10)
+	  vel=-10;
+  car.velocidade[0] = vel*Math.cos(car.rotation.y);
+  car.velocidade[2] = -vel*Math.sin(car.rotation.y);
+  car.position.x += car.velocidade[0]*elapsedTime;
+  car.position.z += car.velocidade[2]*elapsedTime;
 
   if(cameraViewCar){
     camera.position.x = car.position.x-(10*Math.cos(car.rotation.y));
