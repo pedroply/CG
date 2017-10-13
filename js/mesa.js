@@ -301,11 +301,11 @@ function animate() {
   //console.log(car.userData.step);
 
   if(gas)
-	vel += 1;
+	vel += 30*elapsedTime;
   else if(back)
-    vel -= 0.5;
+    vel -= 20*elapsedTime;
   else
-	 vel *= 0.9;
+	 vel *= 55*elapsedTime;
 
   if(left){
 	  car.rotation.y += 5*elapsedTime;
