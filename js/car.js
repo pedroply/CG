@@ -9,6 +9,8 @@ class Car {
     this.velocidade = new THREE.Vector3(0,0,0);
     var material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
     this.vel = 0;
+    this.collisionFront = 0;
+    this.collisionBack = 0;
     this.addMainChassis(this.car, 0*tam, 1*tam, 0*tam,tam);
     this.addCockpit(this.car, -0.6*tam, 2*tam, 0*tam,tam);
     this.addWheel(this.car, 2*tam, 0.5*tam, 1.6*tam,tam);
@@ -85,15 +87,19 @@ class Car {
   }
 
   accelerate(deltaT){
-    this.vel += 30*deltaT;
-    if(this.vel>30)
-  	  this.vel=30;
+    if (this.collisionFront == 0){
+      this.vel += 30*deltaT;
+      if(this.vel>30)
+    	  this.vel=30;
+    }
   }
 
   accelerateBack(deltaT){
-    this.vel -= 20*deltaT;
-    if(this.vel<-10)
-  	  this.vel=-10;
+    if (this.collisionBack == 0){
+      this.vel -= 20*deltaT;
+      if(this.vel<-10)
+    	  this.vel=-10;
+      }
   }
 
   desccelerate(deltaT){
@@ -135,4 +141,24 @@ class Car {
     return this.car.radius;
   }
 
+  setRotationX(value){
+    this.car.rotation.x = value;
+  }
+
+  setRotationY(value){
+    this.car.rotation.y = value;
+  }
+
+  stopFrontMovement(){
+    this.collisionFront = 1;
+  }
+
+  stopBackMovement(){
+    this.collisionBack = 1;
+  }
+
+  resumeMovement(){
+    this.collisionFront = 0;
+    this.collisionBack = 0;
+  }
 }
