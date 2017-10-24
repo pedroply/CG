@@ -39,54 +39,43 @@ function numeroLaranjas(num_lar){
   }
 }
 
-function createBorder(x, y, z){
-  'use strict';
-  var geometry = new THREE.TorusGeometry(1, 0.3, 5, 10);
-  material = new THREE.MeshBasicMaterial({color: 0xe5a734, wireframe:false});
-  var torus = new THREE.Mesh(geometry, material);
-  torus.position.set(x,y,z);
-  torus.rotation.x = Math.PI / 2;
-  scene.add(torus);
-
-}
-
 function createInnerBorder(num, spacing, starting){
 	var inner;
 	for (inner = 0; inner <= starting && num > 0; inner += spacing){
-      createBorder(inner, 0.25, starting);
-      createBorder(inner, 0.25, -starting);
+      objs.push(new Cheerio(inner, 0.25, starting, scene));
+      objs.push(new Cheerio(inner, 0.25, -starting, scene));
       if (inner != 0){
-	      createBorder(-inner, 0.25, starting);
-	      createBorder(-inner, 0.25, -starting);
-	      createBorder(-starting, 0.25, -inner);
-	      createBorder(starting, 0.25, -inner);
+	      objs.push(new Cheerio(-inner, 0.25, starting, scene));
+	      objs.push(new Cheerio(-inner, 0.25, -starting, scene));
+	      objs.push(new Cheerio(-starting, 0.25, -inner, scene));
+	      objs.push(new Cheerio(starting, 0.25, -inner, scene));
 	      num = num - 2;
 	  }
 	  else{
 	  	num--;
 	  }
-	  createBorder(-starting, 0.25, inner);
-      createBorder(starting, 0.25, inner);
+	  objs.push(new Cheerio(-starting, 0.25, inner, scene));
+    objs.push(new Cheerio(starting, 0.25, inner, scene));
   }
 }
 
 function createOutterBorder(num, spacing, starting){
 	var outter;
 	for (outter = 0; outter <= starting && num > 0; outter += spacing){
-      createBorder(outter, 0.25, starting);
-      createBorder(outter, 0.25, -starting);
+      objs.push(new Cheerio(outter, 0.25, starting, scene));
+      objs.push(new Cheerio(outter, 0.25, -starting, scene));
       if (outter != 0){
-	      createBorder(-outter, 0.25, starting);
-	      createBorder(-outter, 0.25, -starting);
-	      createBorder(-starting, 0.25, -outter);
-	      createBorder(starting, 0.25, -outter);
+	      objs.push(new Cheerio(-outter, 0.25, starting, scene));
+	      objs.push(new Cheerio(-outter, 0.25, -starting, scene));
+	      objs.push(new Cheerio(-starting, 0.25, -outter, scene));
+	      objs.push(new Cheerio(starting, 0.25, -outter, scene));
 	      num = num - 2;
 	  }
 	  else{
 	  	num--;
 	  }
-	  createBorder(-starting, 0.25, outter);
-      createBorder(starting, 0.25, outter);
+	  objs.push(new Cheerio(-starting, 0.25, outter, scene));
+    objs.push(new Cheerio(starting, 0.25, outter, scene));
   }
 }
 
@@ -171,9 +160,26 @@ function init(){
 }
 
 function checkLimits(new_x, new_z){
-  console.log(new_x + car.getRadius());
   if (new_x + car.getRadius() > 40 || new_x - car.getRadius() < -40 || new_z + car.getRadius() > 40 || new_z - car.getRadius() < -40){
     car.setPosition(0,0,20);
+    car.desccelerate(0);
+  }
+}
+
+function checkCollisions(new_car_x, new_car_z){
+  var i;
+  for (i=0 ; i < objs.length; i++){
+    var distance = Math.pow((car.getPosition().x - objs[i].getPosition().x), 2) + Math.pow((car.getPosition().z - objs[i].getPosition().z), 2);
+    var radius_sum = Math.pow((car.getRadius() + objs[i].getRadius()), 2);
+    if (radius_sum >= distance){
+      if (objs[i] instanceof Laranja){
+        car.setPosition(0,0,20);
+        car.desccelerate(0);
+      }
+      if (objs[i] instanceof Butter){
+        car.desccelerate(0);
+      }
+    }
   }
 }
 
@@ -207,6 +213,7 @@ function animate() {
   updated_pos_x = car.getPosition().x;
   updated_pos_z = car.getPosition().z;
   checkLimits(updated_pos_x, updated_pos_z);
+  checkCollisions(updated_pos_x, updated_pos_z);
 
 
   if(cameraViewCar == 3){

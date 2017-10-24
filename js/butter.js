@@ -7,12 +7,21 @@ class Butter {
 
     this.butter = new THREE.Object3D();
     this.butter.add(new THREE.Mesh(geometry, material));
+    this.butter.radius = 3;
 
   	this.butter.position.x = Math.random() - 0.5;
   	this.butter.position.z = Math.random() - 0.5;
   	this.butter.position.multiplyScalar( 80 );
   	this.butter.position.y = 1;
   	scene.add( this.butter );
+  }
+
+  getRadius(){
+    return this.butter.radius;
+  }
+
+  getPosition(){
+    return this.butter.position;
   }
 
 }

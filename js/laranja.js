@@ -12,6 +12,7 @@ class Laranja {
     this.laranja.position.z = Math.random() - 0.5;
     this.laranja.position.multiplyScalar( 80 );
     this.laranja.position.y = r;
+    this.laranja.radius = r;
     this.addPeLaranja(this.laranja, 0,0,0,r);
     scene.add(this.laranja);
   }
@@ -36,5 +37,13 @@ class Laranja {
     this.addFolhaLaranja(pe, 0,0,0);
 
     obj.add(pe);
+  }
+
+  getPosition(){
+    return this.laranja.position;
+  }
+
+  getRadius(){
+    return this.laranja.radius;
   }
 }
