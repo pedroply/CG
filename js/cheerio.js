@@ -21,4 +21,8 @@ class Cheerio {
 	getRadius(){
 		return this.cheerio.radius;
 	}
+
+	update(){
+
+  	}
 }

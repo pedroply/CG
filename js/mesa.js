@@ -29,13 +29,9 @@ function createTable(x, y, z){
 }
 
 function numeroLaranjas(num_lar){
-  var i, raio;
+  var i;
   for(i = 1; i <= num_lar ; i++ ){
-    raio = Math.random()*10 - 5;
-    if(raio < 2.5){
-    	raio = 2.5;
-    }
-    objs.push(new Laranja(raio, scene));
+    objs.push(new Laranja(scene));
   }
 }
 
@@ -214,7 +210,10 @@ function animate() {
   updated_pos_z = car.getPosition().z;
   checkLimits(updated_pos_x, updated_pos_z);
   checkCollisions(updated_pos_x, updated_pos_z);
-
+  var i;
+  for(i = 0; i<objs.length; i++){
+    objs[i].update(elapsedTime);
+  }
 
   if(cameraViewCar == 3){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
