@@ -191,13 +191,13 @@ function checkCollisions(new_car_x, new_car_z){
       }
       if (objs[i] instanceof Butter){
         butter = objs[i];
-        if (gas){
+        if (car.getSpeed() > 0){
           if (control == 1){
             car.stopFrontMovement();
             car.desccelerate(0);
             }
         }
-        if (back){
+        if (car.getSpeed() < 0){
           if (control == 1){
             car.stopBackMovement();
             car.desccelerate(0);

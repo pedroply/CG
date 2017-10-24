@@ -161,4 +161,8 @@ class Car {
     this.collisionFront = 0;
     this.collisionBack = 0;
   }
+
+  getSpeed(){
+    return this.vel;
+  }
 }
