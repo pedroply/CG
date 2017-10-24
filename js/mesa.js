@@ -1,7 +1,7 @@
 
 var camera, scene, renderer, material, aspectratio, velocidade,vel, objs = new Array();
 
-var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1;
+var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1, butter;
 
 var clock = new THREE.Clock;
 
@@ -87,7 +87,7 @@ function createScene(){
   scene = new THREE.Scene();
   scene.add(new THREE.AxisHelper(10));
   var inner, outter;
-  car = new Car(0, 0, 20, 1, scene);
+  car = new Car(-20, 0, 30, 1, scene);
 
   createTable(0,0,0);
   numeroLaranjas(3);
@@ -157,23 +157,46 @@ function init(){
 
 function checkLimits(new_x, new_z){
   if (new_x + car.getRadius() > 40 || new_x - car.getRadius() < -40 || new_z + car.getRadius() > 40 || new_z - car.getRadius() < -40){
-    car.setPosition(0,0,20);
+    car.setPosition(-20,0,30);
     car.desccelerate(0);
+    car.setRotationX(0);
+        car.setRotationY(0);
   }
 }
 
 function checkCollisions(new_car_x, new_car_z){
-  var i;
+  var i, control = 1;
   for (i=0 ; i < objs.length; i++){
-    var distance = Math.pow((car.getPosition().x - objs[i].getPosition().x), 2) + Math.pow((car.getPosition().z - objs[i].getPosition().z), 2);
+    var distance = Math.pow((car.getPosition().x - objs[i].getPosition().x), 2) + Math.pow((car.getPosition().z - objs[i].getPosition().z), 2) + Math.pow((car.getPosition().y - objs[i].getPosition().y), 2);
     var radius_sum = Math.pow((car.getRadius() + objs[i].getRadius()), 2);
+    if (butter != null && butter.getPosition().x == objs[i].getPosition().x && butter.getPosition().y == objs[i].getPosition().y && butter.getPosition().z == objs[i].getPosition().z){
+      control = 0;
+      butter = null;
+      if (distance > radius_sum){
+        car.resumeMovement();
+      }
+    }
     if (radius_sum >= distance){
       if (objs[i] instanceof Laranja){
-        car.setPosition(0,0,20);
+        car.setPosition(-20,0,30);
         car.desccelerate(0);
+        car.setRotationX(0);
+        car.setRotationY(0);
       }
       if (objs[i] instanceof Butter){
-        car.desccelerate(0);
+        butter = objs[i];
+        if (gas){
+          if (control == 1){
+            car.stopFrontMovement();
+            car.desccelerate(0);
+            }
+        }
+        if (back){
+          if (control == 1){
+            car.stopBackMovement();
+            car.desccelerate(0);
+            }
+        }
       }
     }
   }
