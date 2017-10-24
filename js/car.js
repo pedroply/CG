@@ -21,12 +21,22 @@ class Car {
     this.addAxis(this.car, 2*tam, 0.5*tam, -1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam, 1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
-
+    //this.addSphereTest(this.car, 0*tam, 1*tam, 0*tam, tam);
+    this.car.radius = 3.45*tam;
     scene.add(this.car);
     this.car.position.x = x;
     this.car.position.y = y;
     this.car.position.z = z;
   }
+
+  /*addSphereTest(obj, x, y, z, tam){
+    'use strict';
+    var geometry = new THREE.SphereGeometry(3.45*tam, 8, 6);
+    var material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:false});
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(x,y,z);
+    obj.add(mesh);
+  }*/
 
   addMainChassis(obj, x, y, z,tam){
     'use strict';
@@ -111,6 +121,16 @@ class Car {
 
   getRotation(){
     return this.car.rotation;
+  }
+
+  setPosition(new_x, new_y, new_z){
+    this.car.position.x = new_x;
+    this.car.position.y = new_y;
+    this.car.position.z = new_z;
+  }
+
+  getRadius(){
+    return this.car.radius;
   }
 
 }

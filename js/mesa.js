@@ -219,21 +219,20 @@ function init(){
   window.addEventListener("keyup", onKeyUp);
 }
 
-function checkLimits(new_x, new_y){
-  if (new_x > 40 || new_x < -40 || new_y > 40 || new_y < -40){
-    car.position.x = 0;
-    car.position.y = 0;
-    car.position.z = 0;
+function checkLimits(new_x, new_z){
+  console.log(new_x + car.getRadius());
+  if (new_x + car.getRadius() > 40 || new_x - car.getRadius() < -40 || new_z + car.getRadius() > 40 || new_z - car.getRadius() < -40){
+    car.setPosition(0,0,20);
   }
 }
 
 function animate() {
   'use strict';
   var elapsedTime = clock.getDelta ();
-  var previous_pos_x = car.position.x;
-  var previous_pos_y = car.position.y;
+  //var previous_pos_x = car.position.x;
+  //var previous_pos_y = car.position.y;
   var updated_pos_x;
-  var updated_pos_y;
+  var updated_pos_z;
 
 
   //console.log(car.userData.step);
@@ -254,6 +253,9 @@ function animate() {
   }
 
   car.update(elapsedTime);
+  updated_pos_x = car.getPosition().x;
+  updated_pos_z = car.getPosition().z;
+  checkLimits(updated_pos_x, updated_pos_z);
 
 
   if(cameraViewCar == 3){
