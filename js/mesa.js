@@ -1,5 +1,5 @@
 
-var camera, scene, renderer, material, aspectratio, velocidade,vel;
+var camera, scene, renderer, material, aspectratio, velocidade,vel, objs = new Array();
 
 var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1;
 
@@ -28,42 +28,6 @@ function createTable(x, y, z){
   table.position.z = z;
 }
 
-function addFolhaLaranja(obj, x, y, z){
-  'use strict';
-  var geometry = new THREE.CubeGeometry(0.3,0.8, 1.3);
-  material = new THREE.MeshBasicMaterial( {color: 0x009900, wireframe: false} );
-  var folha = new THREE.Mesh( geometry, material );
-  folha.position.set(x,y,z + 0.80);
-
-  obj.add(folha);
-}
-
-function addPeLaranja(obj, x, y, z, raio){
-  'use strict';
-  var geometry = new THREE.CubeGeometry(0.3, 2, 0.3);
-  material = new THREE.MeshBasicMaterial( {color: 0x331900, wireframe: false} );
-  var pe = new THREE.Mesh( geometry, material );
-  pe.position.set(x,raio + 1,z);
-
-  addFolhaLaranja(pe, 0,0,0);
-
-  obj.add(pe);
-}
-
-function createLaranja(raio){ //esta a criar umas dentro de outras
-  'use strict';
-  var geometry = new THREE.SphereGeometry( raio, 15, 16 );
-  material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
-  var laranja = new THREE.Mesh( geometry, material );
-
-  laranja.position.x = Math.random() - 0.5;
-  laranja.position.z = Math.random() - 0.5;
-  laranja.position.multiplyScalar( 80 );
-  laranja.position.y = raio;
-  addPeLaranja(laranja, 0,0,0,raio);
-  scene.add( laranja );
-}
-
 function numeroLaranjas(num_lar){
   var i, raio;
   for(i = 1; i <= num_lar ; i++ ){
@@ -71,7 +35,7 @@ function numeroLaranjas(num_lar){
     if(raio < 2.5){
     	raio = 2.5;
     }
-    createLaranja(raio);
+    objs.push(new Laranja(raio, scene));
   }
 }
 
@@ -126,23 +90,10 @@ function createOutterBorder(num, spacing, starting){
   }
 }
 
-function createButter(){//aparecem umas dentro das outras
-	'use strict';
-	var geometry = new THREE.CubeGeometry(3, 2, 7);
-	material = new THREE.MeshBasicMaterial({color: 0xffd633, wireframe:false});
-	var butter = new THREE.Mesh(geometry, material);
-
-	butter.position.x = Math.random() - 0.5;
-	butter.position.z = Math.random() - 0.5;
-	butter.position.multiplyScalar( 80 );
-	butter.position.y = 1;
-	scene.add( butter );
-}
-
 function numeroButters(num_But){
   var i;
   for(i = 1; i <= num_But ; i++ ){
-    createButter();
+    objs.push(new Butter(scene));
   }
 }
 
