@@ -29,13 +29,9 @@ function createTable(x, y, z){
 }
 
 function numeroLaranjas(num_lar){
-  var i, raio;
+  var i;
   for(i = 1; i <= num_lar ; i++ ){
-    raio = Math.random()*10 - 5;
-    if(raio < 2.5){
-    	raio = 2.5;
-    }
-    objs.push(new Laranja(raio, scene));
+    objs.push(new Laranja(scene));
   }
 }
 
@@ -193,6 +189,10 @@ function animate() {
   }
 
   car.update(elapsedTime);
+  var i;
+  for(i = 0; i<objs.length; i++){
+    objs[i].update(elapsedTime);
+  }
 
 
   if(cameraViewCar == 3){
