@@ -5,79 +5,6 @@ var car, gas = false, left = false, right = false, back = false, cameraViewCar =
 
 var clock = new THREE.Clock;
 
-function addMainChassis(obj, x, y, z,tam){
-  'use strict';
-  var geometry = new THREE.CubeGeometry(6*tam, 1*tam, 3*tam);
-  material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:false});
-  var mesh = new THREE.Mesh(geometry, material);
-  mesh.position.set(x,y,z);
-  obj.add(mesh);
-}
-
-function addCockpit(obj, x, y, z,tam){
-  'use strict';
-  var geometry = new THREE.CubeGeometry(3*tam, 1*tam, 3*tam);
-  material = new THREE.MeshBasicMaterial({color: 0xff5520, wireframe:false});
-  var mesh = new THREE.Mesh(geometry, material);
-  mesh.position.set(x,y,z);
-  obj.add(mesh);
-}
-
-function addWheel(obj, x, y, z,tam){
-  'use strict';
-  var geometry = new THREE.TorusGeometry( 0.5*tam, 0.2*tam, 16*tam, 50*tam);
-  material = new THREE.MeshBasicMaterial({color: 0x000000, wireframe:false});
-  var torus = new THREE.Mesh( geometry, material );
-  torus.position.set(x,y,z);
-  obj.add(torus);
-}
-
-function addLights(obj, x, y, z,tam){
-  'use strict';
-  var geometry = new THREE.CylinderGeometry( 0.2*tam, 0.1*tam, 0.1*tam, 32*tam );
-  material = new THREE.MeshBasicMaterial({color: 0xffff00, wireframe:false});
-  var cylinder = new THREE.Mesh( geometry, material );
-  cylinder.rotation.set(0,0,Math.PI/2);
-  cylinder.position.set(x,y,z);
-  obj.add( cylinder );
-}
-
-function addAxis(obj, x, y, z,tam){
-  'use strict';
-  var geometry = new THREE.CylinderGeometry( 0.2*tam, 0.2*tam, 0.2*tam, 32 *tam);
-  var cylinder = new THREE.Mesh( geometry, material );
-  cylinder.rotation.set(Math.PI/2, 0, 0);
-  cylinder.position.set(x,y,z);
-  obj.add( cylinder );
-}
-
-function createCar(x, y, z, tam){
-  'use strict';
-  car = new THREE.Object3D();
-  car.add(new THREE.AxisHelper(10));
-  car.velocidade = new THREE.Vector3(0,0,0);
-  car.vel_inst = 0;
-  material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
-  vel = 0;
-  addMainChassis(car, 0*tam, 1*tam, 0*tam,tam);
-  addCockpit(car, -0.6*tam, 2*tam, 0*tam,tam);
-  addWheel(car, 2*tam, 0.5*tam, 1.6*tam,tam);
-  addWheel(car, 2*tam, 0.5*tam, -1.6*tam,tam);
-  addWheel(car, -2*tam, 0.5*tam, 1.6*tam,tam);
-  addWheel(car, -2*tam, 0.5*tam, -1.6*tam,tam);
-  addLights(car, 3*tam, 1*tam, 1.2*tam,tam);
-  addLights(car, 3*tam, 1*tam, -1.2*tam,tam);
-  addAxis(car, 2*tam, 0.5*tam, 1.5*tam,tam);
-  addAxis(car, 2*tam, 0.5*tam, -1.5*tam,tam);
-  addAxis(car, -2*tam, 0.5*tam, 1.5*tam,tam);
-  addAxis(car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
-
-  scene.add(car);
-  car.position.x = x;
-  car.position.y = y;
-  car.position.z = z;
-}
-
 function addTableTop(obj, x, y, z){
   'use strict';
   var geometry = new THREE.CubeGeometry(80, 0, 80);
@@ -141,7 +68,7 @@ function numeroLaranjas(num_lar){
   var i, raio;
   for(i = 1; i <= num_lar ; i++ ){
     raio = Math.random()*10 - 5;
-    if(raio < 2.5){ 
+    if(raio < 2.5){
     	raio = 2.5;
     }
     createLaranja(raio);
@@ -224,9 +151,9 @@ function createScene(){
   scene = new THREE.Scene();
   scene.add(new THREE.AxisHelper(10));
   var inner, outter;
+  car = new Car(0, 0, 20, 1, scene);
 
   createTable(0,0,0);
-  createCar(0, 0, 20, 1); // o ultimo parametro é o tamanho
   numeroLaranjas(3);
   numeroButters(5);
   createInnerBorder(7, 3.5, 13);  //num torus, espacamento entre torus, distancia limite
@@ -312,36 +239,29 @@ function animate() {
   //console.log(car.userData.step);
 
   if(gas)
-	vel += 30*elapsedTime;
+	  car.accelerate(elapsedTime);
   else if(back)
-    vel -= 20*elapsedTime;
+    car.accelerateBack(elapsedTime);
   else
-	 vel *= 55*elapsedTime;
+    car.desccelerate(elapsedTime);
 
   if(left){
-	  car.rotation.y += 5*elapsedTime;
+	  car.turnL(elapsedTime);
   }
 
   if(right){
-  	car.rotation.y -= 5*elapsedTime;
+  	 car.turnR(elapsedTime);
   }
 
-  if(vel>30)
-	  vel=30;
-  if(vel<-10)
-	  vel=-10;
-  car.velocidade[0] = vel*Math.cos(car.rotation.y);
-  car.velocidade[2] = -vel*Math.sin(car.rotation.y);
-  updated_pos_x = car.position.x += car.velocidade[0]*elapsedTime;
-  updated_pos_y = car.position.z += car.velocidade[2]*elapsedTime;
-  checkLimits(updated_pos_x, updated_pos_y);
+  car.update(elapsedTime);
+
 
   if(cameraViewCar == 3){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-    camera.position.x = car.position.x-(10*Math.cos(car.rotation.y));
+    camera.position.x = car.getPosition().x-(10*Math.cos(car.getRotation().y));
     camera.position.y = 10;
-    camera.position.z = car.position.z+(10*Math.sin(car.rotation.y));
-    camera.lookAt(car.position);
+    camera.position.z = car.getPosition().z+(10*Math.sin(car.getRotation().y));
+    camera.lookAt(car.getPosition());
   }
   if(cameraViewCar == 2){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
@@ -416,17 +336,3 @@ function onKeyUp(e){
       break;
 	}
 }
-
-
-/*  
-Fiz:
-	laranjas aparecem aleatoriamente na mesa e tb variam de tamaho aleatoriamente
-	as manteigas apararecem aleatoriamente na mesa
-	as 3 camaras diferentes se clicares nas teclas '1', '2' e '3'
-	o tamanho do carro ja varia todo so com a alteração de um valor 
-	o carro so vira se estiver a mover-se para a frente ou para tras
-Falta:
-	as laranja nao podem aparecer uma dentro das outras
-	mudar a wireframe para uma variavel
-	o resto do enunciaado 
-	            */
