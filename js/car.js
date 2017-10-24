@@ -101,11 +101,13 @@ class Car {
   }
 
   turnL(deltaT){
-    this.car.rotation.y += 5*deltaT;
+    if(this.vel > 0.1 || this.vel < -0.1)
+      this.car.rotation.y += 0.2*this.vel*deltaT;
   }
 
   turnR(deltaT){
-    this.car.rotation.y -= 5*deltaT;
+    if(this.vel > 0.1 || this.vel < -0.1)
+      this.car.rotation.y -= 0.2*this.vel*deltaT;
   }
 
   update(deltaT){

@@ -5,6 +5,13 @@ var car, gas = false, left = false, right = false, back = false, cameraViewCar =
 
 var clock = new THREE.Clock;
 
+var ratio = 2.07;
+var scale = 0.013;
+var scale_width;
+var scale_height;
+var last_width;
+var last_height;
+
 function addTableTop(obj, x, y, z){
   'use strict';
   var geometry = new THREE.CubeGeometry(80, 0, 80);
@@ -87,7 +94,7 @@ function createScene(){
   scene = new THREE.Scene();
   scene.add(new THREE.AxisHelper(10));
   var inner, outter;
-  car = new Car(0, 0, 20, 1, scene);
+  car = new Car(-20, 0, 30, 1, scene);
 
   createTable(0,0,0);
   numeroLaranjas(3);
@@ -106,30 +113,29 @@ function createCamera(){
 
 }
 
-function onResize(){
-  'use strict';
-  /*renderer.setSize(window.innerWidth, window.innerHeight);
-  if (window.innerHeight > 0 && window.innerWidth > 0){
-    camera.aspect = renderer.getSize().width / renderer.getSize().height;
-    camera.updateProjectionMatrix();
-  }*/
-  /*renderer.setSize(window.innerWidth, window.innerHeight);
-  if (window.innerHeight > 0 && window.innerWidth > 0){
-  	camera.left = renderer.getSize().width/-5;
-  	camera.right = renderer.getSize().width/5;
-  	camera.top = renderer.getSize().height/5;
-  	camera.bottom = renderer.getSize().height/-5;
-  	console.log(camera.left, camera.right, camera.top, camera.bottom);
-  }
-  camera.updateProjectionMatrix();*/
-  var new_height = window.innerWidth / aspectratio;
-    if (new_height <= window.innerHeight ) {
-        camera.aspect = aspectratio;
-        renderer.setSize( window.innerWidth, new_height );
-    } else {
-        camera.aspect = 1/aspectratio;
-        renderer.setSize( window.innerHeight * aspectratio, window.innerHeight );
+
+/*Main function for window resize*/
+function onResize() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    if(cameraViewCar == 1)
+      if (window.innerWidth / window.innerHeight > ratio)
+          resizeOrtCamera(scale_height);
+      else
+          resizeOrtCamera(scale_width);
+
+    else if(cameraViewCar == 2 || cameraViewCar == 3){
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
     }
+}
+
+/*OrthographicCamera resize function*/
+function resizeOrtCamera(scale) {
+    camera.left = -window.innerWidth / scale;
+    camera.right = window.innerWidth / scale;
+    camera.top = -window.innerHeight / scale;
+    camera.bottom = window.innerHeight / scale;
     camera.updateProjectionMatrix();
 }
 
@@ -173,7 +179,7 @@ function checkCollisions(new_car_x, new_car_z){
         car.desccelerate(0);
       }
       if (objs[i] instanceof Butter){
-        car.desccelerate(0);
+        //car.desccelerate(0);
       }
     }
   }
@@ -249,12 +255,10 @@ function onKeyDown(e) {
 		  gas = true;
 		  break;
 		case 37:  //esquerda seta
-		  if(gas || back)
 		  left = true;
 		  break;
 		case 39:  //direita seta
-		  if(gas || back)
-		     right = true;
+		  right = true;
 		  break;
 		case 40:  //baixo seta
 		  back = true;

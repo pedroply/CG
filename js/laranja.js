@@ -7,14 +7,16 @@ class Laranja {
     var material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
     this.laranja = new THREE.Object3D();
     this.velocidade = new THREE.Vector3(0,0,0);
-    this.vel = 10;
     this.scene = scene;
+    this.timer = 0;
+    this.time = 0;
+    this.timeout = Math.random()*2;
+    this.vel = 5*(this.time/30 + 0.5) + 5*Math.random();
 
     this.laranja.add(new THREE.Mesh( geometry, material ));
 
-    this.laranja.position.x = Math.random() - 0.5;
-    this.laranja.position.z = Math.random() - 0.5;
-    this.laranja.position.multiplyScalar( 80 );
+    this.laranja.position.x = 50;
+    this.laranja.position.z = 50;
     this.laranja.position.y = this.raio;
     this.laranja.rotation.y = Math.random()*3.14*2;;
     this.addPeLaranja(this.laranja, 0,0,0, this.raio);
@@ -52,30 +54,41 @@ class Laranja {
     }
 
   update(deltaT){
-    this.velocidade[0] = this.vel*Math.cos(this.laranja.rotation.y);
-    this.velocidade[2] = -this.vel*Math.sin(this.laranja.rotation.y);
-    this.laranja.position.x += this.velocidade[0]*deltaT;
-    this.laranja.position.z += this.velocidade[2]*deltaT;
-    this.laranja.rotation.z -= this.vel*deltaT/this.raio;
-    if(this.laranja.position.x+this.raio > 40 || this.laranja.position.x-this.raio < -40
-    || this.laranja.position.z+this.raio > 40 || this.laranja.position.z-this.raio < -40){ //rest laranja
-      this.scene.remove(this.laranja);
-      this.raio = Math.random()*2.5 + 2.5;
-      var geometry = new THREE.SphereGeometry(this.raio, 15, 16);
-      var material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
-      this.laranja = new THREE.Object3D();
-      this.velocidade = new THREE.Vector3(0,0,0);
-      this.vel = 10;
+    this.time += deltaT;
+    if(this.timer < this.timeout){
+      this.timer += deltaT;
+      if(this.timer >= this.timeout){
+        this.scene.add(this.laranja);
+        this.laranja.position.x = 13*Math.random() - 13*Math.random();
+        this.laranja.position.z = 13*Math.random() - 13*Math.random();
+      }
+    }
+    else{
+      this.velocidade[0] = this.vel*Math.cos(this.laranja.rotation.y);
+      this.velocidade[2] = -this.vel*Math.sin(this.laranja.rotation.y);
+      this.laranja.position.x += this.velocidade[0]*deltaT;
+      this.laranja.position.z += this.velocidade[2]*deltaT;
+      this.laranja.rotation.z -= this.vel*deltaT/this.raio;
+      if(this.laranja.position.x+this.raio > 40 || this.laranja.position.x-this.raio < -40
+      || this.laranja.position.z+this.raio > 40 || this.laranja.position.z-this.raio < -40){ //rest laranja
+        this.timer = 0;
+        this.timeout = Math.random()*2;
+        this.scene.remove(this.laranja);
+        this.raio = Math.random()*2.5 + 2.5;
+        var geometry = new THREE.SphereGeometry(this.raio, 15, 16);
+        var material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
+        this.laranja = new THREE.Object3D();
+        this.velocidade = new THREE.Vector3(0,0,0);
+        this.vel = 5*(this.time/30 + 0.5) + 5*Math.random();
 
-      this.laranja.add(new THREE.Mesh( geometry, material ));
+        this.laranja.add(new THREE.Mesh( geometry, material ));
 
-      this.laranja.position.x = 0.5 - Math.random();
-      this.laranja.position.z = 0.5 - Math.random();
-      this.laranja.position.multiplyScalar( 80 );
-      this.laranja.position.y = this.raio;
-      this.laranja.rotation.y = Math.random()*3.14*2;;
-      this.addPeLaranja(this.laranja, 0,0,0, this.raio);
-      this.scene.add(this.laranja);
+        this.laranja.position.x = 50;
+        this.laranja.position.z = 50;
+        this.laranja.position.y = this.raio;
+        this.laranja.rotation.y = Math.random()*3.14*2;;
+        this.addPeLaranja(this.laranja, 0,0,0, this.raio);
+      }
     }
   }
 }
