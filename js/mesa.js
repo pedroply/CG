@@ -173,9 +173,11 @@ function checkLimits(new_x, new_z){
 function checkCollisions(new_car_x, new_car_z){
   var i, control = 1;
   for (i=0 ; i < objs.length; i++){
-    var distance = Math.pow((car.getPosition().x - objs[i].getPosition().x), 2) + Math.pow((car.getPosition().z - objs[i].getPosition().z), 2) + Math.pow((car.getPosition().y - objs[i].getPosition().y), 2);
+    var distance = Math.pow((car.getPosition().x - objs[i].getPosition().x), 2)
+    + Math.pow((car.getPosition().z - objs[i].getPosition().z), 2) + Math.pow((car.getPosition().y - objs[i].getPosition().y), 2);
     var radius_sum = Math.pow((car.getRadius() + objs[i].getRadius()), 2);
-    if (butter != null && butter.getPosition().x == objs[i].getPosition().x && butter.getPosition().y == objs[i].getPosition().y && butter.getPosition().z == objs[i].getPosition().z){
+    if (butter != null && butter.getPosition().x == objs[i].getPosition().x && butter.getPosition().y == objs[i].getPosition().y
+      && butter.getPosition().z == objs[i].getPosition().z){
       control = 0;
       butter = null;
       if (distance > radius_sum){
@@ -188,24 +190,45 @@ function checkCollisions(new_car_x, new_car_z){
         car.desccelerate(0);
         car.setRotationX(0);
         car.setRotationY(0);
+    }
+    else if (objs[i] instanceof Butter){
+      butter = objs[i];
+      if (car.getSpeed() > 0){
+        if (control == 1){
+          car.stopFrontMovement();
+          car.desccelerate(0);
+          }
       }
-      if (objs[i] instanceof Butter){
-        butter = objs[i];
-        if (car.getSpeed() > 0){
-          if (control == 1){
-            car.stopFrontMovement();
-            car.desccelerate(0);
-            }
-        }
-        if (car.getSpeed() < 0){
-          if (control == 1){
-            car.stopBackMovement();
-            car.desccelerate(0);
-            }
-        }
+      if (car.getSpeed() < 0){
+        if (control == 1){
+          car.stopBackMovement();
+          car.desccelerate(0);
+          }
       }
     }
+    else if (objs[i] instanceof Cheerio){
+      //console.log(" car hit cheerio")
+      objs[i].treatCollision(car);
+    }
+
   }
+
+    //check with all other objects
+    var j;
+    for(j = i+1; j<objs.length; j++){
+      distance = Math.pow((objs[j].getPosition().x - objs[i].getPosition().x), 2)
+      + Math.pow((objs[j].getPosition().z - objs[i].getPosition().z), 2) + Math.pow((objs[j].getPosition().y - objs[i].getPosition().y), 2);
+      radius_sum = Math.pow((objs[j].getRadius() + objs[i].getRadius()), 2);
+
+      if (radius_sum >= distance){
+        if (objs[j] instanceof Cheerio){
+          objs[i].treatCollision(objs[j]);
+          /*if(objs[i] instanceof Cheerio)
+            console.log("cheerio hit by cheerio");*/
+        }
+     }
+   }
+ }
 }
 
 function animate() {
@@ -237,12 +260,13 @@ function animate() {
   car.update(elapsedTime);
   updated_pos_x = car.getPosition().x;
   updated_pos_z = car.getPosition().z;
-  checkLimits(updated_pos_x, updated_pos_z);
-  checkCollisions(updated_pos_x, updated_pos_z);
   var i;
   for(i = 0; i<objs.length; i++){
     objs[i].update(elapsedTime);
   }
+
+  //checkLimits(updated_pos_x, updated_pos_z);
+  checkCollisions(updated_pos_x, updated_pos_z);
 
   if(cameraViewCar == 3){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);

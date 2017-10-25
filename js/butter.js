@@ -34,6 +34,10 @@ class Butter {
     return this.butter.position;
   }
 
+  treatCollision(obj){
+
+  }
+
   update(){
 
   }

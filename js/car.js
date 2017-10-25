@@ -5,8 +5,8 @@ class Car {
   constructor(x, y, z, tam, scene) {
     'use strict';
     this.car = new THREE.Object3D();
-    this.car.add(new THREE.AxisHelper(10));
-    this.velocidade = new THREE.Vector3(0,0,0);
+    //this.car.add(new THREE.AxisHelper(10));
+    this.velocidade = new Array();
     var material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
     this.vel = 0;
     this.collisionFront = 0;
@@ -164,5 +164,9 @@ class Car {
 
   getSpeed(){
     return this.vel;
+  }
+
+  getVelocity(){
+    return this.velocidade;
   }
 }
