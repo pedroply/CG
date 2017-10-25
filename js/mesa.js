@@ -1,7 +1,7 @@
 
 var camera, scene, renderer, material, aspectratio, velocidade,vel, objs = new Array();
 
-var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1, butter;
+var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1, butter, elapsedTime;
 
 var clock = new THREE.Clock;
 
@@ -63,7 +63,7 @@ function createInnerBorder(num, spacing, starting){
 }
 
 function createOutterBorder(num, spacing, starting){
-	var outter;
+	var outter, cheerio;
 	for (outter = 0; outter <= starting && num > 0; outter += spacing){
       objs.push(new Cheerio(outter, 0.25, starting, scene));
       objs.push(new Cheerio(outter, 0.25, -starting, scene));
@@ -98,9 +98,11 @@ function createScene(){
 
   createTable(0,0,0);
   numeroLaranjas(3);
-  numeroButters(5);
   createInnerBorder(7, 3.5, 13);  //num torus, espacamento entre torus, distancia limite
   createOutterBorder(19, 3.5, 35); //num tem de ser impar, conta com o criado no 0 + o gerado acima e abaixo
+  objs.push(car); //in objs we always check from left to right, since oranges & torus have their own collisiontreatment and butter does not, butter is
+                  //inside car need to add butters after car to objs, need to add collision treatment to butter instead of car.
+  numeroButters(5);
 }
 
 function createCamera(){
@@ -166,51 +168,22 @@ function checkLimits(new_x, new_z){
     car.setPosition(-20,0,30);
     car.desccelerate(0);
     car.setRotationX(0);
-        car.setRotationY(0);
+    car.setRotationY(0);
   }
 }
 
 function checkCollisions(new_car_x, new_car_z){
-  var i, control = 1;
-  for (i=0 ; i < objs.length; i++){
-    var distance = Math.pow((car.getPosition().x - objs[i].getPosition().x), 2) + Math.pow((car.getPosition().z - objs[i].getPosition().z), 2) + Math.pow((car.getPosition().y - objs[i].getPosition().y), 2);
-    var radius_sum = Math.pow((car.getRadius() + objs[i].getRadius()), 2);
-    if (butter != null && butter.getPosition().x == objs[i].getPosition().x && butter.getPosition().y == objs[i].getPosition().y && butter.getPosition().z == objs[i].getPosition().z){
-      control = 0;
-      butter = null;
-      if (distance > radius_sum){
-        car.resumeMovement();
-      }
-    }
-    if (radius_sum >= distance){
-      if (objs[i] instanceof Laranja){
-        car.setPosition(-20,0,30);
-        car.desccelerate(0);
-        car.setRotationX(0);
-        car.setRotationY(0);
-      }
-      if (objs[i] instanceof Butter){
-        butter = objs[i];
-        if (car.getSpeed() > 0){
-          if (control == 1){
-            car.stopFrontMovement();
-            car.desccelerate(0);
-            }
-        }
-        if (car.getSpeed() < 0){
-          if (control == 1){
-            car.stopBackMovement();
-            car.desccelerate(0);
-            }
-        }
-      }
+  var i, j, control = 1;
+  for (i=0 ; i < objs.length-1; i++){
+    for (j=i+1; j < objs.length; j++){
+      objs[i].checkCollisions(objs[j]);
     }
   }
 }
 
 function animate() {
   'use strict';
-  var elapsedTime = clock.getDelta ();
+  elapsedTime = clock.getDelta ();
   //var previous_pos_x = car.position.x;
   //var previous_pos_y = car.position.y;
   var updated_pos_x;
@@ -234,15 +207,15 @@ function animate() {
   	 car.turnR(elapsedTime);
   }
 
-  car.update(elapsedTime);
-  updated_pos_x = car.getPosition().x;
-  updated_pos_z = car.getPosition().z;
-  checkLimits(updated_pos_x, updated_pos_z);
-  checkCollisions(updated_pos_x, updated_pos_z);
+  //car.update(elapsedTime);
   var i;
   for(i = 0; i<objs.length; i++){
     objs[i].update(elapsedTime);
   }
+  updated_pos_x = car.getPosition().x;
+  updated_pos_z = car.getPosition().z;
+  checkLimits(updated_pos_x, updated_pos_z);
+  checkCollisions(updated_pos_x, updated_pos_z);
 
   if(cameraViewCar == 3){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);

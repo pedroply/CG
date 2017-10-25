@@ -1,13 +1,14 @@
 
-class Butter {
+class Butter extends GameEntity{
   constructor(scene){
     'use strict';
+    super();
   	var geometry = new THREE.CubeGeometry(3, 2, 7);
   	var material = new THREE.MeshBasicMaterial({color: 0xffd633, wireframe:false});
 
     this.butter = new THREE.Object3D();
     this.butter.add(new THREE.Mesh(geometry, material));
-    this.butter.radius = 3;
+    this.radius = 3;
 
     if(Math.random() > 0.5){
     	this.butter.position.x = 13 + 22*Math.random(); //13 a 35
@@ -27,7 +28,7 @@ class Butter {
   }
 
   getRadius(){
-    return this.butter.radius;
+    return this.radius;
   }
 
   getPosition(){
@@ -35,6 +36,10 @@ class Butter {
   }
 
   update(){
+
+  }
+
+  treatCollision(obj){
 
   }
 

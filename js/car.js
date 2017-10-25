@@ -1,16 +1,19 @@
 
 
-class Car {
+class Car extends GameEntity{
 
   constructor(x, y, z, tam, scene) {
     'use strict';
+    super();
     this.car = new THREE.Object3D();
     this.car.add(new THREE.AxisHelper(10));
-    this.velocidade = new THREE.Vector3(0,0,0);
+    this.velocidade = new Array();
     var material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
     this.vel = 0;
+    this.collidedButter = null;
     this.collisionFront = 0;
     this.collisionBack = 0;
+    this.butterControl = 0;
     this.addMainChassis(this.car, 0*tam, 1*tam, 0*tam,tam);
     this.addCockpit(this.car, -0.6*tam, 2*tam, 0*tam,tam);
     this.addWheel(this.car, 2*tam, 0.5*tam, 1.6*tam,tam);
@@ -31,14 +34,6 @@ class Car {
     this.car.position.z = z;
   }
 
-  /*addSphereTest(obj, x, y, z, tam){
-    'use strict';
-    var geometry = new THREE.SphereGeometry(3.45*tam, 8, 6);
-    var material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:false});
-    var mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(x,y,z);
-    obj.add(mesh);
-  }*/
 
   addMainChassis(obj, x, y, z,tam){
     'use strict';
@@ -123,6 +118,24 @@ class Car {
     this.car.position.z += this.velocidade[2]*deltaT;
   }
 
+  treatCollision(obj){
+    if (obj instanceof Butter){
+      this.collidedButter = obj;
+        if (this.vel > 0){
+          if (this.butterControl == 0){
+              car.stopFrontMovement();
+              car.desccelerate(0);
+            }
+          }
+        else if (this.vel < 0){
+          if (this.butterControl == 0){
+            car.stopBackMovement();
+            car.desccelerate(0);
+          }
+        }
+        
+    }
+  }
   getPosition(){
     return this.car.position;
   }
@@ -157,6 +170,18 @@ class Car {
     this.collisionBack = 1;
   }
 
+  setCollidedButter(obj){
+    this.collidedButter = obj;
+  }
+
+  getCollidedButter(){
+    return this.collidedButter;
+  }
+
+  getCollidedCheerio(){
+    return this.collidedCheerio;
+  }
+
   resumeMovement(){
     this.collisionFront = 0;
     this.collisionBack = 0;
@@ -164,5 +189,16 @@ class Car {
 
   getSpeed(){
     return this.vel;
+  }
+
+  setSpeed(num){
+    this.vel = num;
+  }
+
+  setButterControl(num){
+    this.butterControl = num;
+  }
+  getVelocity(){
+    return this.velocidade;
   }
 }

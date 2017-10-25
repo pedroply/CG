@@ -1,7 +1,8 @@
 
-class Laranja {
+class Laranja extends GameEntity {
   constructor(scene){
     'use strict';
+    super();
     this.raio = Math.random()*2.5 + 2.5;
     var geometry = new THREE.SphereGeometry(this.raio, 15, 16);
     var material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
@@ -52,6 +53,15 @@ class Laranja {
   getRadius(){
     return this.raio;
     }
+
+  treatCollision(obj){
+    if (obj instanceof Car){
+        car.setPosition(-20,0,30);
+        car.desccelerate(0);
+        car.setRotationX(0);
+        car.setRotationY(0);
+      }
+  }
 
   update(deltaT){
     this.time += deltaT;
