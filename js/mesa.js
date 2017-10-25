@@ -119,10 +119,10 @@ function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     if(cameraViewCar == 1)
-      if (window.innerWidth / window.innerHeight > ratio)
-          resizeOrtCamera(scale_height);
+      if (window.innerWidth / window.innerHeight > last_width/last_height)
+          resizeOrtCamera(last_height/last_width);
       else
-          resizeOrtCamera(scale_width);
+          resizeOrtCamera(last_width/last_height);
 
     else if(cameraViewCar == 2 || cameraViewCar == 3){
       camera.aspect = window.innerWidth / window.innerHeight;
