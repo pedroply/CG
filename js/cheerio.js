@@ -28,7 +28,6 @@ class Cheerio extends GameEntity {
 
 	treatCollision(obj){
 		if (obj instanceof Car || obj instanceof Cheerio){
-			console.log("MEEP")
 			var aux = new Array();
 			aux[1] = -obj.getPosition().x+this.getPosition().x;
 			aux[3] = -obj.getPosition().z+this.getPosition().z;

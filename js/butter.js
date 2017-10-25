@@ -35,6 +35,10 @@ class Butter extends GameEntity{
     return this.butter.position;
   }
 
+  treatCollision(obj){
+
+  }
+
   update(){
 
   }
