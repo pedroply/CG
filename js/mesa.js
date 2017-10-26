@@ -214,7 +214,7 @@ function animate() {
   }
   updated_pos_x = car.getPosition().x;
   updated_pos_z = car.getPosition().z;
-  checkLimits(updated_pos_x, updated_pos_z);
+  //checkLimits(updated_pos_x, updated_pos_z);
   checkCollisions(updated_pos_x, updated_pos_z);
 
   //checkLimits(updated_pos_x, updated_pos_z);
@@ -229,9 +229,9 @@ function animate() {
   }
   if(cameraViewCar == 2){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-    camera.position.x = 0;
-    camera.position.y = 50;
-    camera.position.z = 0;
+    camera.position.x = 45;
+    camera.position.y = 25;
+    camera.position.z = 35;
     camera.lookAt(scene.position);
   }
   if(cameraViewCar == 1){

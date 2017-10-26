@@ -4,7 +4,8 @@ class GameEntity {
 	}
 
 	checkCollisions(obj){
-		var distance = Math.pow((this.getPosition().x - obj.getPosition().x), 2) + Math.pow((this.getPosition().z - obj.getPosition().z), 2) + Math.pow((this.getPosition().y - obj.getPosition().y), 2);
+		var distance = Math.pow((this.getPosition().x - obj.getPosition().x), 2) + Math.pow((this.getPosition().z - obj.getPosition().z), 2)
+		+ Math.pow((this.getPosition().y - obj.getPosition().y), 2);
     	var radius_sum = Math.pow((this.getRadius() + obj.getRadius()), 2);
     	car.setButterControl(0);
         /*if (obj instanceof Cheerio && this instanceof Cheerio){
@@ -13,7 +14,8 @@ class GameEntity {
             }
         }*/
 
-    	if (this instanceof Car && obj instanceof Butter && this.getCollidedButter() != null && this.getCollidedButter().getPosition().x == obj.getPosition().x && this.getCollidedButter().getPosition().y == obj.getPosition().y && this.getCollidedButter().getPosition().z == obj.getPosition().z){
+    	if (this instanceof Car && obj instanceof Butter && this.getCollidedButter() != null && this.getCollidedButter().getPosition().x == obj.getPosition().x
+			&& this.getCollidedButter().getPosition().y == obj.getPosition().y && this.getCollidedButter().getPosition().z == obj.getPosition().z){
     		this.setButterControl(1);
 	        if (distance > radius_sum){
 	          this.setCollidedButter(null);

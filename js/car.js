@@ -133,9 +133,10 @@ class Car extends GameEntity{
             car.desccelerate(0);
           }
         }
-        
+
     }
   }
+
   getPosition(){
     return this.car.position;
   }
