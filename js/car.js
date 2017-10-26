@@ -26,7 +26,6 @@ class Car extends GameEntity{
     this.addAxis(this.car, 2*tam, 0.5*tam, -1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam, 1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
-    //this.addSphereTest(this.car, 0*tam, 1*tam, 0*tam, tam);
     this.car.radius = 3.45*tam;
     scene.add(this.car);
     this.car.position.x = x;
@@ -119,7 +118,7 @@ class Car extends GameEntity{
   }
 
   treatCollision(obj){
-    if (obj instanceof Butter){
+    /*if (obj instanceof Butter){
       this.collidedButter = obj;
         if (this.vel > 0){
           if (this.butterControl == 0){
@@ -134,7 +133,7 @@ class Car extends GameEntity{
           }
         }
         
-    }
+    }*/
   }
   getPosition(){
     return this.car.position;
@@ -163,11 +162,11 @@ class Car extends GameEntity{
   }
 
   stopFrontMovement(){
-    this.collisionFront = 1;
+      this.collisionFront = 1;
   }
 
   stopBackMovement(){
-    this.collisionBack = 1;
+      this.collisionBack = 1;
   }
 
   setCollidedButter(obj){
@@ -176,10 +175,6 @@ class Car extends GameEntity{
 
   getCollidedButter(){
     return this.collidedButter;
-  }
-
-  getCollidedCheerio(){
-    return this.collidedCheerio;
   }
 
   resumeMovement(){
@@ -201,4 +196,5 @@ class Car extends GameEntity{
   getVelocity(){
     return this.velocidade;
   }
+
 }
