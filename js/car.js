@@ -10,6 +10,8 @@ class Car extends GameEntity{
     this.velocidade = new Array();
     var material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:false});
     this.vel = 0;
+    this.turbo = false;
+    this.handbrake = false;
     this.collidedButter = null;
     this.collisionFront = 0;
     this.collisionBack = 0;
@@ -26,7 +28,6 @@ class Car extends GameEntity{
     this.addAxis(this.car, 2*tam, 0.5*tam, -1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam, 1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
-    //this.addSphereTest(this.car, 0*tam, 1*tam, 0*tam, tam);
     this.car.radius = 3.45*tam;
     scene.add(this.car);
     this.car.position.x = x;
@@ -83,9 +84,13 @@ class Car extends GameEntity{
 
   accelerate(deltaT){
     if (this.collisionFront == 0){
+      if(this.turbo)
+        this.vel += 10*deltaT;
       this.vel += 30*deltaT;
-      if(this.vel>30)
+      if(this.vel>30 && !this.turbo)
     	  this.vel=30;
+      if(this.vel>50 && this.turbo)
+        this.vel=50;
     }
   }
 
@@ -119,22 +124,7 @@ class Car extends GameEntity{
   }
 
   treatCollision(obj){
-    if (obj instanceof Butter){
-      this.collidedButter = obj;
-        if (this.vel > 0){
-          if (this.butterControl == 0){
-              car.stopFrontMovement();
-              car.desccelerate(0);
-            }
-          }
-        else if (this.vel < 0){
-          if (this.butterControl == 0){
-            car.stopBackMovement();
-            car.desccelerate(0);
-          }
-        }
 
-    }
   }
 
   getPosition(){
@@ -164,11 +154,11 @@ class Car extends GameEntity{
   }
 
   stopFrontMovement(){
-    this.collisionFront = 1;
+      this.collisionFront = 1;
   }
 
   stopBackMovement(){
-    this.collisionBack = 1;
+      this.collisionBack = 1;
   }
 
   setCollidedButter(obj){
@@ -177,10 +167,6 @@ class Car extends GameEntity{
 
   getCollidedButter(){
     return this.collidedButter;
-  }
-
-  getCollidedCheerio(){
-    return this.collidedCheerio;
   }
 
   resumeMovement(){
@@ -202,4 +188,5 @@ class Car extends GameEntity{
   getVelocity(){
     return this.velocidade;
   }
+
 }

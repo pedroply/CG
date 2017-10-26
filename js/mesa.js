@@ -1,7 +1,7 @@
 
 var camera, scene, renderer, material, aspectratio, velocidade,vel, objs = new Array();
 
-var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1, butter, elapsedTime;
+var car, gas = false, left = false, right = false, back = false, turbo = false, handbrake = false, cameraViewCar = 1, butter, elapsedTime;
 
 var clock = new THREE.Clock;
 
@@ -97,12 +97,11 @@ function createScene(){
   car = new Car(-20, 0, 30, 1, scene);
 
   createTable(0,0,0);
-  numeroLaranjas(3);
+  numeroLaranjas(0);
   createInnerBorder(7, 3.5, 13);  //num torus, espacamento entre torus, distancia limite
   createOutterBorder(19, 3.5, 35); //num tem de ser impar, conta com o criado no 0 + o gerado acima e abaixo
-  objs.push(car); //in objs we always check from left to right, since oranges & torus have their own collisiontreatment and butter does not, butter is
-                  //inside car need to add butters after car to objs, need to add collision treatment to butter instead of car.
   numeroButters(5);
+  objs.push(car);
 }
 
 function createCamera(){
@@ -172,7 +171,7 @@ function checkLimits(new_x, new_z){
   }
 }
 
-function checkCollisions(new_car_x, new_car_z){
+function checkCollisions(){
   var i, j, control = 1;
   for (i=0 ; i < objs.length-1; i++){
     for (j=i+1; j < objs.length; j++){
@@ -203,7 +202,6 @@ function animate() {
   if(left){
 	  car.turnL(elapsedTime);
   }
-
   if(right){
   	 car.turnR(elapsedTime);
   }
@@ -215,10 +213,7 @@ function animate() {
   updated_pos_x = car.getPosition().x;
   updated_pos_z = car.getPosition().z;
   //checkLimits(updated_pos_x, updated_pos_z);
-  checkCollisions(updated_pos_x, updated_pos_z);
-
-  //checkLimits(updated_pos_x, updated_pos_z);
-  checkCollisions(updated_pos_x, updated_pos_z);
+  checkCollisions();
 
   if(cameraViewCar == 3){
   	camera = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
@@ -296,5 +291,11 @@ function onKeyUp(e){
         }
       })
       break;
+    case 84:  //t
+		  car.turbo = !car.turbo;
+		  break;
+    case 32:  //space
+		  car.handbrake = !car.handbrake;
+		  break;
 	}
 }
