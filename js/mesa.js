@@ -1,12 +1,12 @@
 
 var camera, scene, renderer, material, aspectratio, velocidade,vel, objs = new Array();
 
-var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1, butter, elapsedTime;
+var car, gas = false, left = false, right = false, back = false, cameraViewCar = 1, elapsedTime;
 
 var clock = new THREE.Clock;
 
 var ratio = 2.07;
-var scale = 0.013;
+var scale = 0.0115;
 var scale_width;
 var scale_height;
 var last_width;
@@ -106,7 +106,13 @@ function createScene(){
 
 function createCamera(){
   'use strict';
-  camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000);
+  //camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000);
+  if (window.innerWidth / window.innerHeight > ratio)
+        camera = new THREE.OrthographicCamera(-window.innerWidth / scale_height, window.innerWidth / scale_height, window.innerHeight / scale_height, -window.innerHeight / scale_height, 1, 100);
+    else
+        camera = new THREE.OrthographicCamera(-window.innerWidth / scale_width, window.innerWidth / scale_width, window.innerHeight / scale_width, -window.innerHeight / scale_width, 1, 100);
+  last_width = window.innerWidth;
+  last_height = window.innerHeight;
   camera.position.x = 0;
   camera.position.y = 50;
   camera.position.z = 0;
@@ -118,12 +124,17 @@ function createCamera(){
 /*Main function for window resize*/
 function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
+    scale_width = (window.innerWidth * scale_width) / last_width;
+    scale_height = (window.innerHeight * scale_height) / last_height;
+    last_width = window.innerWidth;
+    last_height = window.innerHeight;
 
-    if(cameraViewCar == 1)
-      if (window.innerWidth / window.innerHeight > last_width/last_height)
-          resizeOrtCamera(last_height/last_width);
+    if(cameraViewCar == 1){
+      if (window.innerWidth / window.innerHeight > ratio)
+          resizeOrtCamera(scale_height);
       else
-          resizeOrtCamera(last_width/last_height);
+          resizeOrtCamera(scale_width);
+        }
 
     else if(cameraViewCar == 2 || cameraViewCar == 3){
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -135,8 +146,8 @@ function onResize() {
 function resizeOrtCamera(scale) {
     camera.left = -window.innerWidth / scale;
     camera.right = window.innerWidth / scale;
-    camera.top = -window.innerHeight / scale;
-    camera.bottom = window.innerHeight / scale;
+    camera.top = window.innerHeight / scale;
+    camera.bottom = -window.innerHeight / scale;
     camera.updateProjectionMatrix();
 }
 
@@ -151,6 +162,8 @@ function init(){
   renderer.setSize(window.innerWidth, window.innerHeight);
   aspectratio = window.innerWidth / window.innerHeight;
   document.body.appendChild(renderer.domElement);
+  scale_width = window.innerWidth * scale;
+  scale_height = window.innerHeight * scale * ratio;
 
   createScene();
   createCamera();
@@ -231,11 +244,7 @@ function animate() {
     camera.lookAt(scene.position);
   }
   if(cameraViewCar == 1){
-  	camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000);
-    camera.position.x = 0;
-    camera.position.y = 50;
-    camera.position.z = 0;
-    camera.lookAt(scene.position);
+  	createCamera();
   }
 
   render();
