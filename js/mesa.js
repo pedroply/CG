@@ -20,7 +20,7 @@ var day = 1;
 var sun;
 var candles = new Array(6);
 var candles_on = 0;
-var sun_on = 0;
+var sun_on = 1;
 
 //             MATERIALS         //
 var basic = 1;
