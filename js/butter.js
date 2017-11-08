@@ -1,14 +1,14 @@
 
 class Butter extends GameEntity{
 
-  constructor(scene){
+  constructor(scene, mat){
     'use strict';
     super();
   	var geometry = new THREE.CubeGeometry(3, 2, 7);
-  	var material = new THREE.MeshBasicMaterial({color: 0xffd633, wireframe:false});
-
     this.butter = new THREE.Object3D();
-    this.butter.add(new THREE.Mesh(geometry, material));
+    this.mesh = new THREE.Mesh(geometry, mat);
+    this.butter.add(this.mesh);
+    this.material = mat;
     this.radius = 3;
     this.inCollision = 1;
 
@@ -62,6 +62,19 @@ class Butter extends GameEntity{
 
   setInCollision(num){
   	this.inCollision =num;
+  }
+
+  setLighting(materials, active){
+    this.mesh.material = materials[3][active];
+  }
+
+  setBasicMaterial(materials, basic, previous){
+    if (basic){
+      this.setLighting(materials, previous);
+    }
+    else{
+      this.mesh.material = materials[3][0];
+  	}
   }
 
 }

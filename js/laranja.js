@@ -1,20 +1,20 @@
 
 class Laranja extends GameEntity {
-  constructor(scene){
+  constructor(scene,mat){
     'use strict';
     super();
     this.raio = Math.random()*2.5 + 2.5;
-    var geometry = new THREE.SphereGeometry(this.raio, 15, 16);
-    var material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
+    var geometry = new THREE.SphereGeometry(this.raio, 10, 10);
     this.laranja = new THREE.Object3D();
     this.velocidade = new Array();
     this.scene = scene;
     this.timer = 0;
     this.time = 0;
+    this.material = mat;
     this.timeout = Math.random()*2;
     this.vel = 5*(this.time/30 + 0.5) + 5*Math.random();
-
-    this.laranja.add(new THREE.Mesh( geometry, material ));
+    this.mesh = new THREE.Mesh( geometry, this.material )
+    this.laranja.add(this.mesh);
 
     this.laranja.position.x = 50;
     this.laranja.position.z = 50;
@@ -85,13 +85,12 @@ class Laranja extends GameEntity {
         this.timeout = Math.random()*2;
         this.scene.remove(this.laranja);
         this.raio = Math.random()*2.5 + 2.5;
-        var geometry = new THREE.SphereGeometry(this.raio, 15, 16);
-        var material = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: false} );
+        var geometry = new THREE.SphereGeometry(this.raio, 5, 5);
         this.laranja = new THREE.Object3D();
         this.velocidade = new Array();
         this.vel = 5*(this.time/30 + 0.5) + 5*Math.random();
 
-        this.laranja.add(new THREE.Mesh( geometry, material ));
+        this.laranja.add(this.mesh);
 
         this.laranja.position.x = 50;
         this.laranja.position.z = 50;
@@ -99,6 +98,20 @@ class Laranja extends GameEntity {
         this.laranja.rotation.y = Math.random()*3.14*2;;
         this.addPeLaranja(this.laranja, 0,0,0, this.raio);
       }
+    }
+  }
+
+  setLighting(materials, active){
+    this.mesh.material = materials[6][active];
+
+  }
+
+  setBasicMaterial(materials, basic, previous){
+    if (basic){
+      this.setLighting(materials, previous);
+    }
+    else{
+      this.mesh.material = materials[6][0];
     }
   }
 }

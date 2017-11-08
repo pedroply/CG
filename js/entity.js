@@ -19,4 +19,12 @@ class GameEntity {
             this.treatCollision(obj);
         }
     }
+
+    changeLightMaterial(materials, active){
+        this.setLighting(materials, active);
+    }
+
+    revertBasic(materials, basic, previous){
+        this.setBasicMaterial(materials, basic, previous);
+    }
 }

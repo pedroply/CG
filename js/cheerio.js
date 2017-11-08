@@ -1,12 +1,13 @@
 
 class Cheerio extends GameEntity {
-	constructor(x,y,z,scene){
+	constructor(x,y,z,scene, mat){
 		'use strict';
 		super();
-		var geometry = new THREE.TorusGeometry(1, 0.3, 5, 10);
-		material = new THREE.MeshBasicMaterial({color: 0xe5a734, wireframe:false});
+		var geometry = new THREE.TorusGeometry(1, 0.3, 5, 8);
 		this.cheerio = new THREE.Object3D();
-		this.cheerio.add(new THREE.Mesh(geometry, material));
+		this.material = mat;
+		this.mesh = new THREE.Mesh(geometry, mat);
+		this.cheerio.add(this.mesh);
 		this.velocidade = new Array();
 		this.cheerio.position.x = x;
 		this.cheerio.position.y = y;
@@ -52,5 +53,18 @@ class Cheerio extends GameEntity {
 
 	getVelocity(){
     return this.velocidade;
+  }
+
+  setLighting(materials, active){
+    this.mesh.material = materials[4][active];
+  }
+
+  setBasicMaterial(materials, basic, previous){
+    if (basic){
+      this.setLighting(materials, previous);
+    }
+    else{
+      this.mesh.material = materials[4][0];
+  	}
   }
 }
