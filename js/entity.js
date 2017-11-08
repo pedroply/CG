@@ -4,7 +4,8 @@ class GameEntity {
 	}
 
 	checkCollisions(obj){
-		var distance = Math.pow((this.getPosition().x - obj.getPosition().x), 2) + Math.pow((this.getPosition().z - obj.getPosition().z), 2) + Math.pow((this.getPosition().y - obj.getPosition().y), 2);
+		var distance = Math.pow((this.getPosition().x - obj.getPosition().x), 2) + Math.pow((this.getPosition().z - obj.getPosition().z), 2)
+		+ Math.pow((this.getPosition().y - obj.getPosition().y), 2);
     	var radius_sum = Math.pow((this.getRadius() + obj.getRadius()), 2);
 
     	if (this instanceof Butter && obj instanceof Car && obj.getCollidedButter() != null && obj.getCollidedButter().getPosition().x == this.getPosition().x && obj.getCollidedButter().getPosition().y == this.getPosition().y && obj.getCollidedButter().getPosition().z == this.getPosition().z){

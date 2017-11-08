@@ -57,11 +57,20 @@ class Laranja extends GameEntity {
 
   treatCollision(obj){
     if (obj instanceof Car){
-        car.setPosition(-20,0,30);
-        car.desccelerate(0);
-        car.setRotationX(0);
-        car.setRotationY(0);
-      }
+        var i;
+        for(i = -1; i<2; i++){
+          var distance = Math.pow(this.getPosition().x - (obj.getPosition().x+i*(obj.getRadius()/2)*Math.cos(obj.getRotation().y)), 2)
+          + Math.pow((this.getPosition().z - (obj.getPosition().z-i*(obj.getRadius()/2)*Math.sin(obj.getRotation().y))), 2)
+          + Math.pow((this.getPosition().y - obj.getPosition().y), 2);
+            var radius_sum = Math.pow((this.getRadius() + obj.getRadius()/2), 2);
+          if(radius_sum >= distance){
+            obj.setPosition(-20,0,30);
+            obj.desccelerate(0);
+            obj.setRotationX(0);
+            obj.setRotationY(0);
+          }
+        }
+    }
   }
   update(deltaT){
     this.time += deltaT;

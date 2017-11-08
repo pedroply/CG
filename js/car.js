@@ -9,6 +9,8 @@ class Car extends GameEntity{
     this.car.add(new THREE.AxisHelper(10));
     this.velocidade = new Array();
     this.vel = 0;
+    this.turbo = false;
+    this.handbrake = false;
     this.collidedButter = null;
     this.collisionFront = 0;
     this.collisionBack = 0;
@@ -86,9 +88,13 @@ class Car extends GameEntity{
 
   accelerate(deltaT){
     if (this.collisionFront == 0){
+      if(this.turbo)
+        this.vel += 10*deltaT;
       this.vel += 30*deltaT;
-      if(this.vel>30)
+      if(this.vel>30 && !this.turbo)
     	  this.vel=30;
+      if(this.vel>50 && this.turbo)
+        this.vel=50;
     }
   }
 

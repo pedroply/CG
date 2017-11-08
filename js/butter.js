@@ -37,23 +37,40 @@ class Butter extends GameEntity{
     return this.butter.position;
   }
 
-  treatCollision(obj){
-  	if (obj instanceof Car){
-  		obj.setCollidedButter(this);
-  		if (obj.getSpeed() > 0){
-  			if (this.inCollision){
-	  			obj.stopFrontMovement();
-	            obj.desccelerate(0);
-	        }
-  		}
-  		else if (obj.getSpeed() < 0){
-  			if (this.inCollision){
-	  			obj.stopBackMovement();
-	  			obj.desccelerate(0);
-	  		}
-  		}
-  	}
+  getRotation(){
+    return this.butter.rotation;
+  }
 
+  treatCollision(obj){
+    if(obj instanceof Car){
+			var i, j, collided = false;
+			for(i = -1; i<2; i++){
+        for(j = -1; j<2; j++){
+  				var distance = Math.pow(this.getPosition().x+j*(this.getRadius()/2)*Math.cos(this.getRotation().y) - (obj.getPosition().x+i*(obj.getRadius()/2)*Math.cos(obj.getRotation().y)), 2)
+  				+ Math.pow((this.getPosition().z-j*(this.getRadius()/2)*Math.sin(this.getRotation().y) - (obj.getPosition().z-i*(obj.getRadius()/2)*Math.sin(obj.getRotation().y))), 2)
+  				+ Math.pow((this.getPosition().y - obj.getPosition().y), 2);
+  		    	var radius_sum = Math.pow((this.getRadius()/2 + obj.getRadius()/2), 2);
+  				if(radius_sum >= distance){
+            collided = true;
+  				}
+        }
+			}
+      if(collided){
+        obj.setCollidedButter(this);
+        if (obj.getSpeed() > 0){
+          if (this.inCollision){
+            obj.stopFrontMovement();
+                obj.desccelerate(0);
+            }
+        }
+        else if (obj.getSpeed() < 0){
+          if (this.inCollision){
+            obj.stopBackMovement();
+            obj.desccelerate(0);
+          }
+        }
+      }
+		}
   }
 
   update(){
@@ -61,7 +78,7 @@ class Butter extends GameEntity{
   }
 
   setInCollision(num){
-  	this.inCollision =num;
+    this.inCollision = num;
   }
 
   setLighting(materials, active){

@@ -393,7 +393,6 @@ function animate() {
   if(left){
 	  car.turnL(elapsedTime);
   }
-
   if(right){
   	 car.turnR(elapsedTime);
   }
@@ -487,5 +486,11 @@ function onKeyUp(e){
       sun_on = !sun_on;
       sunSwitch(sun_on);
       break;
+    case 84:  //t
+		  car.turbo = !car.turbo;
+		  break;
+    case 32:  //space
+		  car.handbrake = !car.handbrake;
+		  break;
 	}
 }
