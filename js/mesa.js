@@ -13,18 +13,18 @@ var last_width;
 var last_height;
 
 var camera = new Array(3);
-var cameraViewCar = 0; 
+var cameraViewCar = 0;
 
 //             LIGHTS            //
 var day = 1;
 var sun;
-var candles = new Array(6);
+var candles = new Array(5);
 var candles_on = 0;
 var sun_on = 1;
 
 //             MATERIALS         //
 var basic = 1;
-var active = 2;  // Gouraud
+var active = 2;  // Phong
 var materials = new Array(7);
 var carIndex = 0;
 var wheelIndex = 1;
@@ -34,6 +34,7 @@ var cheerioIndex = 4;
 var tableIndex = 5;
 var orangeIndex = 6;
 var orange_peIndex = 7;
+
 
 //           WIREFRAME         //
 var wires = false;
@@ -128,9 +129,9 @@ function createCamera(){
 
 function createPerspCamera(){
     camera[1] = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-    camera[1].position.x = 0;
-    camera[1].position.y = 50;
-    camera[1].position.z = 0;
+    camera[1].position.x = 40;
+    camera[1].position.y = 30;
+    camera[1].position.z = 30;
     camera[1].lookAt(scene.position);
 }
 
@@ -346,8 +347,12 @@ function toggleWireframe() {
     wires = !wires;
     var material, i;
     for (i = 0; i < materials.length; i++) {
-        for (mat of materials[i])
+      console.log(i);
+        for (mat of materials[i]){
           mat.wireframe = wires;
+          console.log(mat);
+        }
+
     }
 }
 

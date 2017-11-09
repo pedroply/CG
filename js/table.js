@@ -7,7 +7,6 @@ class Table extends GameEntity{
     super();
     this.table = new THREE.Object3D();
     this.material = mat;
-    this.index = 5;
     this.addTableTop(this.table, 0, -5, 0);
 
     this.table.position.x = 0;
@@ -38,7 +37,7 @@ class Table extends GameEntity{
   }
 
   setLighting(materials, active){
-    this.mesa_mesh.material = materials[this.index][active];
+    this.mesa_mesh.material = materials[5][active];
   }
 
   setBasicMaterial(materials, basic, previous){
@@ -46,7 +45,7 @@ class Table extends GameEntity{
       this.setLighting(materials, previous);
     }
     else{
-      this.mesa_mesh.material = materials[this.index][0];
+      this.mesa_mesh.material = materials[5][0];
   	}
   }
 

@@ -16,8 +16,8 @@ class Laranja extends GameEntity {
     this.vel = 5*(this.time/30 + 0.5) + 5*Math.random();
     this.mesh = new THREE.Mesh( geometry, this.material )
     this.laranja.add(this.mesh);
-    this.laranja.position.x = 50;
-    this.laranja.position.z = 50;
+    this.laranja.position.x = 500;
+    this.laranja.position.z = 500;
     this.laranja.position.y = this.raio;
     this.laranja.rotation.y = Math.random()*3.14*2;;
     this.addPeLaranja(this.laranja, 0,0,0);
