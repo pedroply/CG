@@ -6,6 +6,8 @@ class Car extends GameEntity{
     'use strict';
     super();
     this.car = new THREE.Object3D();
+    this.createCustomCar();
+    this.car.add(new THREE.Mesh(this.geo, carMat));
     this.car.add(new THREE.AxisHelper(10));
     this.velocidade = new Array();
     this.vel = 0;
@@ -18,72 +20,20 @@ class Car extends GameEntity{
     this.carMat = carMat;
     this.wheelMat = wheelMat;
     this.cockpitMat = cockpitMat;
-    this.chassis_mesh;
     this.wheel_mesh = new Array(3);
-    this.cockpit_mesh;
-    this.addMainChassis(this.car, 0*tam, 1*tam, 0*tam,tam);
-    this.addCockpit(this.car, -0.6*tam, 2*tam, 0*tam,tam);
-    this.addWheel(this.car, 2*tam, 0.5*tam, 1.6*tam,tam, 0);
-    this.addWheel(this.car, 2*tam, 0.5*tam, -1.6*tam,tam,1);
-    this.addWheel(this.car, -2*tam, 0.5*tam, 1.6*tam,tam,2);
-    this.addWheel(this.car, -2*tam, 0.5*tam, -1.6*tam,tam,3);
-    this.addLights(this.car, 3*tam, 1*tam, 1.2*tam,tam);
-    this.addLights(this.car, 3*tam, 1*tam, -1.2*tam,tam);
-    this.addAxis(this.car, 2*tam, 0.5*tam, 1.5*tam,tam);
-    this.addAxis(this.car, 2*tam, 0.5*tam, -1.5*tam,tam);
-    this.addAxis(this.car, -2*tam, 0.5*tam, 1.5*tam,tam);
-    this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
+
     this.car.radius = 3.45*tam;
     scene.add(this.car);
     this.car.position.x = x;
     this.car.position.y = y;
     this.car.position.z = z;
-  }
-
-
-  addMainChassis(obj, x, y, z,tam){
-    'use strict';
-    var geometry = new THREE.CubeGeometry(6*tam, 1*tam, 3*tam);
-    var mesh = new THREE.Mesh(geometry, this.carMat);
-    mesh.position.set(x,y,z);
-    this.chassis_mesh = mesh;
-    obj.add(mesh);
-  }
-
-  addCockpit(obj, x, y, z,tam){
-    'use strict';
-    var geometry = new THREE.CubeGeometry(3*tam, 1*tam, 3*tam);
-    var mesh = new THREE.Mesh(geometry, this.cockpitMat);
-    mesh.position.set(x,y,z);
-    this.cockpit_mesh = mesh;
-    obj.add(mesh);
-  }
-
-  addWheel(obj, x, y, z,tam,idx){
-    'use strict';
-    var geometry = new THREE.TorusGeometry( 0.5*tam, 0.2*tam, 10*tam, 10*tam);
-    var torus = new THREE.Mesh( geometry, this.wheelMat );
-    torus.position.set(x,y,z);
-    this.wheel_mesh[idx] = torus;
-    obj.add(torus);
-  }
-
-  addLights(obj, x, y, z,tam){
-    'use strict';
-    var geometry = new THREE.CylinderGeometry( 0.2*tam, 0.1*tam, 0.1*tam, 10*tam );
-    var cylinder = new THREE.Mesh( geometry, this.wheelMat );
-    cylinder.rotation.set(0,0,Math.PI/2);
-    cylinder.position.set(x,y,z);
-    obj.add( cylinder );
-  }
-
-  addAxis(obj, x, y, z,tam){
-    'use strict';
-    var geometry = new THREE.CylinderGeometry( 0.2*tam, 0.2*tam, 0.2*tam, 3 *tam);
-    var cylinder = new THREE.Mesh( geometry, this.carMat );
-    cylinder.rotation.set(Math.PI/2, 0, 0);
-    cylinder.position.set(x,y,z);
-    obj.add( cylinder );
+}
+  addCamera(obj){
+    this.camera = obj;
+    this.camera.position.x = this.car.position.x-(10*Math.cos(this.car.rotation.y));
+    this.camera.position.y = 10;
+    this.camera.position.z = this.car.position.z+(10*Math.sin(this.car.rotation.y));
+    this.camera.lookAt(this.car.position);
   }
 
   accelerate(deltaT){
@@ -125,6 +75,9 @@ class Car extends GameEntity{
     this.velocidade[2] = -this.vel*Math.sin(this.car.rotation.y);
     this.car.position.x += this.velocidade[0]*deltaT;
     this.car.position.z += this.velocidade[2]*deltaT;
+    this.camera.position.x = this.car.position.x-(10*Math.cos(this.car.rotation.y));
+    this.camera.position.z = this.car.position.z+(10*Math.sin(this.car.rotation.y));
+    this.camera.lookAt(this.car.position);
   }
 
   treatCollision(obj){

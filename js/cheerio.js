@@ -6,7 +6,7 @@ class Cheerio extends GameEntity {
 		var geometry = new THREE.TorusGeometry(1, 0.3, 5, 8);
 		this.cheerio = new THREE.Object3D();
 		this.material = mat;
-		this.mesh = new THREE.Mesh(geometry, mat);
+		this.mesh = new THREE.Mesh(geometry, this.material);
 		this.cheerio.add(this.mesh);
 		this.velocidade = new Array();
 		this.cheerio.position.x = x;

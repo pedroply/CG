@@ -25,7 +25,7 @@ var sun_on = 1;
 //             MATERIALS         //
 var basic = 1;
 var active = 2;  // Gouraud
-var materials = new Array(6);
+var materials = new Array(7);
 var carIndex = 0;
 var wheelIndex = 1;
 var cockpitIndex = 2;
@@ -33,44 +33,22 @@ var butterIndex = 3;
 var cheerioIndex = 4;
 var tableIndex = 5;
 var orangeIndex = 6;
-/*var wheelMat = new Array(3);
-var carMat = new Array(3);
-var orangeMat = new Array(3);
-var cheerioMat = new Array(3);
-var butterMat = new Array(3);
-var tableMat = new Array(3);*/
-// var pe&folhaMat 
+var orange_peIndex = 7;
 
 //           WIREFRAME         //
 var wires = false;
-
-function addTableTop(obj, x, y, z){
-  'use strict';
-  var geometry = new THREE.CubeGeometry(80, 10, 80);
-  mesa_mesh = new THREE.Mesh(geometry, material);
-  mesa_mesh.position.set(x,y,z);
-  obj.add(mesa_mesh);
-}
 
 
 
 function createTable(x, y, z){
   'use strict';
-  var table = new THREE.Object3D();
-  material = materials[tableIndex][0];
-
-  addTableTop(table, 0, -5, 0);
-
-  scene.add(table);
-  table.position.x = x;
-  table.position.y = y;
-  table.position.z = z;
+  objs.push(new Table(scene, materials[tableIndex][0]));
 }
 
-function numeroLaranjas(num_lar, mat){
+function numeroLaranjas(num_lar, mat, mat_pe){
   var i;
   for(i = 1; i <= num_lar ; i++ ){
-    objs.push(new Laranja(scene, mat));
+    objs.push(new Laranja(scene, mat, mat_pe));
   }
 }
 
@@ -131,8 +109,8 @@ function createScene(){
   var inner, outter;
   car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
 
-  createTable(0,0,0);
-  numeroLaranjas(3, materials[orangeIndex][0]);
+  createTable();
+  numeroLaranjas(3, materials[orangeIndex][0], materials[orange_peIndex][0]);
   createInnerBorder(7, 3.5, 13, materials[cheerioIndex][0]);  //num torus, espacamento entre torus, distancia limite
   createOutterBorder(19, 3.5, 35, materials[cheerioIndex][0]); //num tem de ser impar, conta com o criado no 0 + o gerado acima e abaixo
   numeroButters(5, materials[butterIndex][0]);
@@ -171,10 +149,7 @@ function createOrtCamera(){
 
 function createBehindCamera(){
     camera[2] = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-    camera[2].position.x = car.getPosition().x-(10*Math.cos(car.getRotation().y));
-    camera[2].position.y = 10;
-    camera[2].position.z = car.getPosition().z+(10*Math.sin(car.getRotation().y));
-    camera[2].lookAt(car.getPosition());
+    car.addCamera(camera[2]);
 }
 
 function createSun(){
@@ -230,12 +205,12 @@ function revertBasic(materials, basic, previous){
   for (i=0 ; i < objs.length; i++){
       objs[i].revertBasic(materials, basic, previous);
   }
-  if (basic){
+  /*if (basic){
     mesa_mesh.material = materials[tableIndex][previous];
   }
   else{
     mesa_mesh.material = materials[tableIndex][0];
-  }
+  }*/
 }
 
 function createMaterials(){
@@ -273,6 +248,11 @@ function createMaterials(){
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
   materials[orangeIndex][1] = new THREE.MeshLambertMaterial( {color: 0xFF6E0E, wireframe: wires });
   materials[orangeIndex][2] = new THREE.MeshPhongMaterial( {color: 0xFF6E0E, wireframe: wires , shininess: 100, specular: 0x111111});
+
+  materials[orange_peIndex] = new Array(3);
+  materials[orange_peIndex][0] = new THREE.MeshBasicMaterial( {color: 0x331900, wireframe: wires });
+  materials[orange_peIndex][1] = new THREE.MeshLambertMaterial( {color: 0x331900, wireframe: wires });
+  materials[orange_peIndex][2] = new THREE.MeshPhongMaterial( {color: 0x331900, wireframe: wires , shininess: 100, specular: 0x111111});
 }
 
 function changeShading(){
@@ -286,7 +266,7 @@ function changeShading(){
   for (i=0 ; i < objs.length; i++){
       objs[i].changeLightMaterial(materials, active);
   }
-  mesa_mesh.material = materials[tableIndex][active];
+  //mesa_mesh.material = materials[tableIndex][active];
 }
 
 /*Main function for window resize*/
@@ -341,9 +321,6 @@ function init(){
   createCamera();
   createSun();
   createCandles(-30, 30, 30, 60);
-
-
-  console.log(scene);
 
   window.addEventListener('resize', onResize);
   window.addEventListener("keydown", onKeyDown);
@@ -401,12 +378,6 @@ function animate() {
   for(i = 0; i<objs.length; i++){
     objs[i].update(elapsedTime);
   }
-  if (cameraViewCar == 2) {
-    camera[2].position.x = car.getPosition().x-(10*Math.cos(car.getRotation().y));
-    camera[2].position.y = 10;
-    camera[2].position.z = car.getPosition().z+(10*Math.sin(car.getRotation().y));
-    camera[2].lookAt(car.getPosition());
-  }
   checkCollisions();
 
   render();
@@ -457,11 +428,6 @@ function onKeyUp(e){
       switchCamera(1);
       break;
     case 65: //a
-      /*scene.traverse(function (node){
-        if(node instanceof THREE.Mesh) {
-          node.material.wireframe = !node.material.wireframe;
-        }
-      })*/
       toggleWireframe();
       break;
 
