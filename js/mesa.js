@@ -150,7 +150,10 @@ function createOrtCamera(){
 
 function createBehindCamera(){
     camera[2] = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-    car.addCamera(camera[2]);
+    camera[2].position.x = car.getPosition().x-(10*Math.cos(car.getRotation().y));
+    camera[2].position.y = 10;
+    camera[2].position.z = car.getPosition().z+(10*Math.sin(car.getRotation().y));
+    camera[2].lookAt(car.getPosition());
 }
 
 function createSun(){
@@ -382,6 +385,12 @@ function animate() {
   var i;
   for(i = 0; i<objs.length; i++){
     objs[i].update(elapsedTime);
+  }
+  if (cameraViewCar == 2) {
+    camera[2].position.x = car.getPosition().x-(10*Math.cos(car.getRotation().y));
+    camera[2].position.y = 10;
+    camera[2].position.z = car.getPosition().z+(10*Math.sin(car.getRotation().y));
+    camera[2].lookAt(car.getPosition());
   }
   checkCollisions();
 
