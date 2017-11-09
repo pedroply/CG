@@ -132,10 +132,10 @@ function createScene(){
   car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
 
   createTable(0,0,0);
-  numeroLaranjas(0, materials[orangeIndex][0]);
+  numeroLaranjas(3, materials[orangeIndex][0]);
   createInnerBorder(7, 3.5, 13, materials[cheerioIndex][0]);  //num torus, espacamento entre torus, distancia limite
   createOutterBorder(19, 3.5, 35, materials[cheerioIndex][0]); //num tem de ser impar, conta com o criado no 0 + o gerado acima e abaixo
-  numeroButters(0, materials[butterIndex][0]);
+  numeroButters(5, materials[butterIndex][0]);
   objs.push(car);
 }
 
