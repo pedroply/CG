@@ -150,9 +150,9 @@ function createCamera(){
 
 function createPerspCamera(){
     camera[1] = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
-    camera[1].position.x = 0;
-    camera[1].position.y = 10;
-    camera[1].position.z = 10;
+    camera[1].position.x = 40;
+    camera[1].position.y = 30;
+    camera[1].position.z = 30;
     camera[1].lookAt(scene.position);
 }
 
