@@ -13,7 +13,7 @@ var last_width;
 var last_height;
 
 var camera = new Array(3);
-var cameraViewCar = 0; 
+var cameraViewCar = 0;
 
 //             LIGHTS            //
 var day = 1;
@@ -39,7 +39,7 @@ var orangeMat = new Array(3);
 var cheerioMat = new Array(3);
 var butterMat = new Array(3);
 var tableMat = new Array(3);*/
-// var pe&folhaMat 
+// var pe&folhaMat
 
 //           WIREFRAME         //
 var wires = false;
@@ -132,10 +132,10 @@ function createScene(){
   car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
 
   createTable(0,0,0);
-  numeroLaranjas(3, materials[orangeIndex][0]);
+  numeroLaranjas(0, materials[orangeIndex][0]);
   createInnerBorder(7, 3.5, 13, materials[cheerioIndex][0]);  //num torus, espacamento entre torus, distancia limite
   createOutterBorder(19, 3.5, 35, materials[cheerioIndex][0]); //num tem de ser impar, conta com o criado no 0 + o gerado acima e abaixo
-  numeroButters(5, materials[butterIndex][0]);
+  numeroButters(0, materials[butterIndex][0]);
   objs.push(car);
 }
 
@@ -151,8 +151,8 @@ function createCamera(){
 function createPerspCamera(){
     camera[1] = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 1, 1000);
     camera[1].position.x = 0;
-    camera[1].position.y = 50;
-    camera[1].position.z = 0;
+    camera[1].position.y = 10;
+    camera[1].position.z = 10;
     camera[1].lookAt(scene.position);
 }
 
