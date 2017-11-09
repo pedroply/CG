@@ -21,7 +21,7 @@ class Car extends GameEntity{
     this.chassis_mesh;
     this.wheel_mesh = new Array(3);
     this.cockpit_mesh;
-    /*this.addMainChassis(this.car, 0*tam, 1*tam, 0*tam,tam);
+    this.addMainChassis(this.car, 0*tam, 1*tam, 0*tam,tam);
     this.addCockpit(this.car, -0.6*tam, 2*tam, 0*tam,tam);
     this.addWheel(this.car, 2*tam, 0.5*tam, 1.6*tam,tam, 0);
     this.addWheel(this.car, 2*tam, 0.5*tam, -1.6*tam,tam,1);
@@ -32,155 +32,73 @@ class Car extends GameEntity{
     this.addAxis(this.car, 2*tam, 0.5*tam, 1.5*tam,tam);
     this.addAxis(this.car, 2*tam, 0.5*tam, -1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam, 1.5*tam,tam);
-    this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);*/
+    this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
 
-    var geometry = new THREE.Geometry();
 
-    /* MAIN CHASSI
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, 1.5 ) );
+    /*RODA*/
+    /*geometry.vertices.push( new THREE.Vector3( 0, -0.4, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, -0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, -0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, 0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, 0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, 0.4, -0.1 ) );
 
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, 1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, -0.4, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, -0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, -0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, 0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, 0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, 0.4, 0.1 ) );
 
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -3, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 1.5, -1.5 ) );*/
-
-    /*COCKPIT
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, -1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, -1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 1.5, 1.5, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 0.4, 2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.8, 2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( -1.5, 1.5, 1.5 ) );*/
-
-    geometry.vertices.push( new THREE.Vector3( 2.5, 0, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 2, 0.2, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 2, 0.6, 1.5 ) );
-    /*geometry.vertices.push( new THREE.Vector3( 3, 0.2, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 2, 0.2, 1.5 ) );*/
-
-    //geometry.vertices.push( new THREE.Vector3( 2, 0.6, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.6, 1.5 ) );
-    //geometry.vertices.push( new THREE.Vector3( 3, 0.2, 1.5 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 2.5, 0.8, 1.5 ) );
-    /*geometry.vertices.push( new THREE.Vector3( 3, 0.6, 1.5 ) );
-    geometry.vertices.push( new THREE.Vector3( 2, 0.6, 1.5 ) );*/
-
-    geometry.vertices.push( new THREE.Vector3( 2.5, 0, 1.7 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.2, 1.7 ) );
-    geometry.vertices.push( new THREE.Vector3( 2, 0.2, 1.7 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 2, 0.6, 1.7 ) );
-    /*geometry.vertices.push( new THREE.Vector3( 3, 0.2, 1.7 ) );
-    geometry.vertices.push( new THREE.Vector3( 2, 0.2, 1.7 ) );*/
-
-    //geometry.vertices.push( new THREE.Vector3( 2, 0.6, 1.7 ) );
-    geometry.vertices.push( new THREE.Vector3( 3, 0.6, 1.7 ) );
-    //geometry.vertices.push( new THREE.Vector3( 3, 0.2, 1.7 ) );
-
-    geometry.vertices.push( new THREE.Vector3( 2.5, 0.8, 1.7 ) );
-    /*geometry.vertices.push( new THREE.Vector3( 3, 0.6, 1.7 ) );
-    geometry.vertices.push( new THREE.Vector3( 2, 0.6, 1.7 ) );*/
-
-    geometry.faces.push( new THREE.Face3( 0, 1, 2));
+    geometry.faces.push( new THREE.Face3( 0, 2, 1));
     geometry.faces.push( new THREE.Face3( 1, 2, 4));
-    geometry.faces.push( new THREE.Face3( 2, 4, 3));
-    geometry.faces.push( new THREE.Face3( 3, 4, 5));
+    geometry.faces.push( new THREE.Face3( 2, 3, 4));
+    geometry.faces.push( new THREE.Face3( 3, 5, 4));
 
-    /*var i;
-    for(i = 0; i<geometry.vertices.length-2; i += 3){
-      geometry.faces.push( new THREE.Face3( i, i+1, i+2));
-    }*/
+    geometry.faces.push( new THREE.Face3( 6, 7, 8));
+    geometry.faces.push( new THREE.Face3( 7, 10, 8));
+    geometry.faces.push( new THREE.Face3( 8, 10, 9));
+    geometry.faces.push( new THREE.Face3( 9, 10, 11));
+
+    geometry.faces.push( new THREE.Face3( 5, 9, 11));
+    geometry.faces.push( new THREE.Face3( 3, 9, 5));
+    geometry.faces.push( new THREE.Face3( 3, 2, 8));
+    geometry.faces.push( new THREE.Face3( 3, 8, 9));
+
+    geometry.faces.push( new THREE.Face3( 2, 0, 6));
+    geometry.faces.push( new THREE.Face3( 6, 8, 2));
+    geometry.faces.push( new THREE.Face3( 1, 7, 6));
+    geometry.faces.push( new THREE.Face3( 6, 0, 1));
+
+    geometry.faces.push( new THREE.Face3( 4, 10, 1));
+    geometry.faces.push( new THREE.Face3( 10, 7, 1));
+    geometry.faces.push( new THREE.Face3( 5, 11, 10));
+    geometry.faces.push( new THREE.Face3( 10, 4, 5));*/
+
+    /*farol*/
+    /*geometry.vertices.push( new THREE.Vector3( 0, 0, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, -0.1, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, 0.1, -0.1 ) );
+
+    geometry.vertices.push( new THREE.Vector3( 0.1, 0, 0.3 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.1, -0.3, -0.3 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.1, 0.3, -0.3 ) );
+
+    geometry.faces.push( new THREE.Face3( 0, 2, 1));
+    geometry.faces.push( new THREE.Face3( 3, 4, 5));
+    geometry.faces.push( new THREE.Face3( 1, 4, 0));
+    geometry.faces.push( new THREE.Face3( 0, 4, 3));
+
+    geometry.faces.push( new THREE.Face3( 3, 5, 2));
+    geometry.faces.push( new THREE.Face3( 2, 0, 3));
+    geometry.faces.push( new THREE.Face3( 5, 1, 2));
+    geometry.faces.push( new THREE.Face3( 5, 4, 1));
 
 
     //the face normals and vertex normals can be calculated automatically if not supplied above
     geometry.computeFaceNormals();
     geometry.computeVertexNormals();
-    this.car.add(new THREE.Mesh( geometry,  this.carMat ));
+    this.car.add(new THREE.Mesh( geometry,  this.carMat ));*/
 
 
     this.car.radius = 3.45*tam;
@@ -193,7 +111,38 @@ class Car extends GameEntity{
 
   addMainChassis(obj, x, y, z,tam){
     'use strict';
-    var geometry = new THREE.CubeGeometry(6*tam, 1*tam, 3*tam);
+    /*var geometry = new THREE.CubeGeometry(6*tam, 1*tam, 3*tam);*/
+
+    var geometry = new THREE.Geometry();
+
+    geometry.vertices.push( new THREE.Vector3( 3, -0.5, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -3, -0.5, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( 3, -0.5, 1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -3, -0.5, 1.5 ) );
+
+    geometry.vertices.push( new THREE.Vector3( 3, 0.5, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -3, 0.5, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( 3, 0.5, 1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -3, 0.5, 1.5 ) );
+
+    geometry.faces.push( new THREE.Face3( 2, 1, 0));
+    geometry.faces.push( new THREE.Face3( 2, 3, 1));
+    geometry.faces.push( new THREE.Face3( 4, 5, 6));
+    geometry.faces.push( new THREE.Face3( 7, 6, 5));
+
+    geometry.faces.push( new THREE.Face3( 4, 0, 1));
+    geometry.faces.push( new THREE.Face3( 4, 1, 5));
+    geometry.faces.push( new THREE.Face3( 6, 7, 3));
+    geometry.faces.push( new THREE.Face3( 6, 3, 2));
+
+    geometry.faces.push( new THREE.Face3( 7, 5, 3));
+    geometry.faces.push( new THREE.Face3( 5, 1, 3));
+    geometry.faces.push( new THREE.Face3( 4, 6, 2));
+    geometry.faces.push( new THREE.Face3( 4, 2, 0));
+
+    geometry.computeFaceNormals();
+    geometry.computeVertexNormals();
+
     var mesh = new THREE.Mesh(geometry, this.carMat);
     mesh.position.set(x,y,z);
     this.chassis_mesh = mesh;
@@ -202,7 +151,37 @@ class Car extends GameEntity{
 
   addCockpit(obj, x, y, z,tam){
     'use strict';
-    var geometry = new THREE.CubeGeometry(3*tam, 1*tam, 3*tam);
+    //var geometry = new THREE.CubeGeometry(3*tam, 1*tam, 3*tam);
+    var geometry = new THREE.Geometry();
+
+    geometry.vertices.push( new THREE.Vector3( 1.5, -0.25, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -1.5, -0.25, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( 1.5, -0.25, 1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -1.5, -0.25, 1.5 ) );
+
+    geometry.vertices.push( new THREE.Vector3( 0.4, 0.25, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.8, 0.25, -1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.4, 0.25, 1.5 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.8, 0.25, 1.5 ) );
+
+    geometry.faces.push( new THREE.Face3( 2, 1, 0));
+    geometry.faces.push( new THREE.Face3( 2, 3, 1));
+    geometry.faces.push( new THREE.Face3( 4, 5, 6));
+    geometry.faces.push( new THREE.Face3( 7, 6, 5));
+
+    geometry.faces.push( new THREE.Face3( 4, 0, 1));
+    geometry.faces.push( new THREE.Face3( 4, 1, 5));
+    geometry.faces.push( new THREE.Face3( 6, 7, 3));
+    geometry.faces.push( new THREE.Face3( 6, 3, 2));
+
+    geometry.faces.push( new THREE.Face3( 7, 5, 3));
+    geometry.faces.push( new THREE.Face3( 5, 1, 3));
+    geometry.faces.push( new THREE.Face3( 4, 6, 2));
+    geometry.faces.push( new THREE.Face3( 4, 2, 0));
+
+    geometry.computeFaceNormals();
+    geometry.computeVertexNormals();
+
     var mesh = new THREE.Mesh(geometry, this.cockpitMat);
     mesh.position.set(x,y,z);
     this.cockpit_mesh = mesh;
@@ -211,7 +190,52 @@ class Car extends GameEntity{
 
   addWheel(obj, x, y, z,tam,idx){
     'use strict';
-    var geometry = new THREE.TorusGeometry( 0.5*tam, 0.2*tam, 10*tam, 10*tam);
+    //var geometry = new THREE.TorusGeometry( 0.5*tam, 0.2*tam, 10*tam, 10*tam);
+
+    var geometry = new THREE.Geometry();
+
+    geometry.vertices.push( new THREE.Vector3( 0, -0.4, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, -0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, -0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, 0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, 0.2, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, 0.4, -0.1 ) );
+
+    geometry.vertices.push( new THREE.Vector3( 0, -0.4, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, -0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, -0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( -0.5, 0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.5, 0.2, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, 0.4, 0.1 ) );
+
+    geometry.faces.push( new THREE.Face3( 0, 2, 1));
+    geometry.faces.push( new THREE.Face3( 1, 2, 4));
+    geometry.faces.push( new THREE.Face3( 2, 3, 4));
+    geometry.faces.push( new THREE.Face3( 3, 5, 4));
+
+    geometry.faces.push( new THREE.Face3( 6, 7, 8));
+    geometry.faces.push( new THREE.Face3( 7, 10, 8));
+    geometry.faces.push( new THREE.Face3( 8, 10, 9));
+    geometry.faces.push( new THREE.Face3( 9, 10, 11));
+
+    geometry.faces.push( new THREE.Face3( 5, 9, 11));
+    geometry.faces.push( new THREE.Face3( 3, 9, 5));
+    geometry.faces.push( new THREE.Face3( 3, 2, 8));
+    geometry.faces.push( new THREE.Face3( 3, 8, 9));
+
+    geometry.faces.push( new THREE.Face3( 2, 0, 6));
+    geometry.faces.push( new THREE.Face3( 6, 8, 2));
+    geometry.faces.push( new THREE.Face3( 1, 7, 6));
+    geometry.faces.push( new THREE.Face3( 6, 0, 1));
+
+    geometry.faces.push( new THREE.Face3( 4, 10, 1));
+    geometry.faces.push( new THREE.Face3( 10, 7, 1));
+    geometry.faces.push( new THREE.Face3( 5, 11, 10));
+    geometry.faces.push( new THREE.Face3( 10, 4, 5));
+
+    geometry.computeFaceNormals();
+    geometry.computeVertexNormals();
+
     var torus = new THREE.Mesh( geometry, this.wheelMat );
     torus.position.set(x,y,z);
     this.wheel_mesh[idx] = torus;
@@ -220,9 +244,33 @@ class Car extends GameEntity{
 
   addLights(obj, x, y, z,tam){
     'use strict';
-    var geometry = new THREE.CylinderGeometry( 0.2*tam, 0.1*tam, 0.1*tam, 10*tam );
+    //var geometry = new THREE.CylinderGeometry( 0.2*tam, 0.1*tam, 0.1*tam, 10*tam );
+
+    var geometry = new THREE.Geometry();
+
+    geometry.vertices.push( new THREE.Vector3( 0, 0, 0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, -0.1, -0.1 ) );
+    geometry.vertices.push( new THREE.Vector3( 0, 0.1, -0.1 ) );
+
+    geometry.vertices.push( new THREE.Vector3( 0.1, 0, 0.3 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.1, -0.3, -0.3 ) );
+    geometry.vertices.push( new THREE.Vector3( 0.1, 0.3, -0.3 ) );
+
+    geometry.faces.push( new THREE.Face3( 0, 2, 1));
+    geometry.faces.push( new THREE.Face3( 3, 4, 5));
+    geometry.faces.push( new THREE.Face3( 1, 4, 0));
+    geometry.faces.push( new THREE.Face3( 0, 4, 3));
+
+    geometry.faces.push( new THREE.Face3( 3, 5, 2));
+    geometry.faces.push( new THREE.Face3( 2, 0, 3));
+    geometry.faces.push( new THREE.Face3( 5, 1, 2));
+    geometry.faces.push( new THREE.Face3( 5, 4, 1));
+
+    geometry.computeFaceNormals();
+    geometry.computeVertexNormals();
+
     var cylinder = new THREE.Mesh( geometry, this.wheelMat );
-    cylinder.rotation.set(0,0,Math.PI/2);
+    //cylinder.rotation.set(0,0,Math.PI/2);
     cylinder.position.set(x,y,z);
     obj.add( cylinder );
   }
