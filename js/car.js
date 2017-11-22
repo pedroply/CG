@@ -6,7 +6,7 @@ class Car extends GameEntity{
     'use strict';
     super();
     this.car = new THREE.Object3D();
-    this.car.add(new THREE.AxisHelper(10));
+    //this.car.add(new THREE.AxisHelper(10));
     this.velocidade = new Array();
     this.vel = 0;
     this.turbo = false;
@@ -21,6 +21,7 @@ class Car extends GameEntity{
     this.chassis_mesh;
     this.wheel_mesh = new Array(3);
     this.cockpit_mesh;
+    this.lights = new Array();
     this.addMainChassis(this.car, 0*tam, 1*tam, 0*tam,tam);
     this.addCockpit(this.car, -0.6*tam, 2*tam, 0*tam,tam);
     this.addWheel(this.car, 2*tam, 0.5*tam, 1.6*tam,tam, 0);
@@ -33,61 +34,6 @@ class Car extends GameEntity{
     this.addAxis(this.car, 2*tam, 0.5*tam, -1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam, 1.5*tam,tam);
     this.addAxis(this.car, -2*tam, 0.5*tam*tam, -1.5*tam,tam);
-
-
-    /*RODA*/
-    /*geometry.vertices.push( new THREE.Vector3( 0, -0.4, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.5, -0.2, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.5, -0.2, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.5, 0.2, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.5, 0.2, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0, 0.4, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0, -0.4, 0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.5, -0.2, 0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.5, -0.2, 0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( -0.5, 0.2, 0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.5, 0.2, 0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0, 0.4, 0.1 ) );
-    geometry.faces.push( new THREE.Face3( 0, 2, 1));
-    geometry.faces.push( new THREE.Face3( 1, 2, 4));
-    geometry.faces.push( new THREE.Face3( 2, 3, 4));
-    geometry.faces.push( new THREE.Face3( 3, 5, 4));
-    geometry.faces.push( new THREE.Face3( 6, 7, 8));
-    geometry.faces.push( new THREE.Face3( 7, 10, 8));
-    geometry.faces.push( new THREE.Face3( 8, 10, 9));
-    geometry.faces.push( new THREE.Face3( 9, 10, 11));
-    geometry.faces.push( new THREE.Face3( 5, 9, 11));
-    geometry.faces.push( new THREE.Face3( 3, 9, 5));
-    geometry.faces.push( new THREE.Face3( 3, 2, 8));
-    geometry.faces.push( new THREE.Face3( 3, 8, 9));
-    geometry.faces.push( new THREE.Face3( 2, 0, 6));
-    geometry.faces.push( new THREE.Face3( 6, 8, 2));
-    geometry.faces.push( new THREE.Face3( 1, 7, 6));
-    geometry.faces.push( new THREE.Face3( 6, 0, 1));
-    geometry.faces.push( new THREE.Face3( 4, 10, 1));
-    geometry.faces.push( new THREE.Face3( 10, 7, 1));
-    geometry.faces.push( new THREE.Face3( 5, 11, 10));
-    geometry.faces.push( new THREE.Face3( 10, 4, 5));*/
-
-    /*farol*/
-    /*geometry.vertices.push( new THREE.Vector3( 0, 0, 0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0, -0.1, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0, 0.1, -0.1 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.1, 0, 0.3 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.1, -0.3, -0.3 ) );
-    geometry.vertices.push( new THREE.Vector3( 0.1, 0.3, -0.3 ) );
-    geometry.faces.push( new THREE.Face3( 0, 2, 1));
-    geometry.faces.push( new THREE.Face3( 3, 4, 5));
-    geometry.faces.push( new THREE.Face3( 1, 4, 0));
-    geometry.faces.push( new THREE.Face3( 0, 4, 3));
-    geometry.faces.push( new THREE.Face3( 3, 5, 2));
-    geometry.faces.push( new THREE.Face3( 2, 0, 3));
-    geometry.faces.push( new THREE.Face3( 5, 1, 2));
-    geometry.faces.push( new THREE.Face3( 5, 4, 1));
-    //the face normals and vertex normals can be calculated automatically if not supplied above
-    geometry.computeFaceNormals();
-    geometry.computeVertexNormals();
-    this.car.add(new THREE.Mesh( geometry,  this.carMat ));*/
 
 
     this.car.radius = 3.45*tam;
@@ -262,6 +208,20 @@ class Car extends GameEntity{
     //cylinder.rotation.set(0,0,Math.PI/2);
     cylinder.position.set(x,y,z);
     obj.add( cylinder );
+
+    var spotLight = new THREE.SpotLight( 0xffffff, 10, 22, Math.PI/4, 0.5, 0.9 );
+    var spotLight_target = new THREE.Object3D();
+    spotLight.position.set( x, y, z );
+    spotLight_target.position.set( x+5, y, z);
+    spotLight.target = spotLight_target;
+    spotLight.castShadow = true;
+    spotLight.shadow.camera.near = 500;
+    spotLight.shadow.camera.far = 4000;
+    spotLight.shadow.camera.fov = 30;
+
+    this.lights[this.lights.length] = spotLight;
+    obj.add( spotLight );
+    obj.add( spotLight_target );
   }
 
   addAxis(obj, x, y, z,tam){
@@ -382,6 +342,17 @@ class Car extends GameEntity{
   }
   getVelocity(){
     return this.velocidade;
+  }
+
+  switchLights(){
+    for(var i = 0; i < this.lights.length; i++){
+      if(this.lights[i].intensity != 0){
+        this.lights[i].intensity = 0;
+      }
+      else{
+        this.lights[i].intensity = 10;
+      }
+    }
   }
 
   setLighting(materials, active){

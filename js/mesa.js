@@ -39,6 +39,9 @@ var orange_peIndex = 7;
 //           WIREFRAME         //
 var wires = false;
 
+var nScene, nCam;
+var pause, restart, sprite;
+
 
 
 function createTable(x, y, z){
@@ -92,6 +95,34 @@ function createOutterBorder(num, spacing, starting, mat){
     objs.push(new Cheerio(starting, 0.25, outter, scene, mat));
   }
 }
+
+function addHUD() {
+	nScene = new THREE.Scene();
+
+	// Spaceship Sprites
+  this.lives = new Array();
+  this.lives.push(new Car(70, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+  this.lives.push(new Car(60, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+  this.lives.push(new Car(50, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+  this.lives.push(new Car(70, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+  this.lives.push(new Car(60, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+
+
+	// Camera
+	if (window.innerWidth / window.innerHeight > ratio)
+		nCam = new THREE.OrthographicCamera(window.innerWidth / scale_height, -window.innerWidth / scale_height, window.innerHeight / scale_height, -window.innerHeight / scale_height, 1, 100);
+	else
+		nCam = new THREE.OrthographicCamera(window.innerWidth / scale_width, -window.innerWidth / scale_width, window.innerHeight / scale_width, -window.innerHeight / scale_width, 1, 100);
+	nScene.add(nCam);
+
+	nScene.add(this.lives[0]);
+	nScene.add(this.lives[1]);
+	nScene.add(this.lives[2]);
+
+	nCam.position.y = 50;
+	nCam.lookAt(nScene.position);
+}
+
 
 function numeroButters(num_But, mat){
   var i;
@@ -220,42 +251,42 @@ function revertBasic(materials, basic, previous){
 function createMaterials(){
   materials[carIndex] = new Array(3);
   materials[carIndex][0] = new THREE.MeshBasicMaterial( {color: 0xff0000, wireframe: wires });
-  materials[carIndex][1] = new THREE.MeshLambertMaterial( {color: 0xff0000, wireframe: wires });
+  materials[carIndex][1] = new THREE.MeshLambertMaterial( {color: 0xff0000, reflectivity: 1, wireframe: wires });
   materials[carIndex][2] = new THREE.MeshPhongMaterial( {color: 0xff0000, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[wheelIndex] = new Array(3);
   materials[wheelIndex][0] = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe: wires });
-  materials[wheelIndex][1] = new THREE.MeshLambertMaterial( {color: 0x000000, wireframe: wires });
+  materials[wheelIndex][1] = new THREE.MeshLambertMaterial( {color: 0x000000, reflectivity: 1, wireframe: wires });
   materials[wheelIndex][2] = new THREE.MeshPhongMaterial( {color: 0x000000, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[cockpitIndex] = new Array(3);
   materials[cockpitIndex][0] = new THREE.MeshBasicMaterial( {color: 0xff5520, wireframe: wires });
-  materials[cockpitIndex][1] = new THREE.MeshLambertMaterial( {color: 0xff5520, wireframe: wires });
+  materials[cockpitIndex][1] = new THREE.MeshLambertMaterial( {color: 0xff5520, reflectivity: 1, wireframe: wires });
   materials[cockpitIndex][2] = new THREE.MeshPhongMaterial( {color: 0xff5520, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[butterIndex] = new Array(3);
   materials[butterIndex][0] = new THREE.MeshBasicMaterial( {color: 0xffd633, wireframe: wires });
-  materials[butterIndex][1] = new THREE.MeshLambertMaterial( {color: 0xffd633, wireframe: wires });
+  materials[butterIndex][1] = new THREE.MeshLambertMaterial( {color: 0xffd633, reflectivity: 1, wireframe: wires });
   materials[butterIndex][2] = new THREE.MeshPhongMaterial( {color: 0xffd633, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[cheerioIndex] = new Array(3);
   materials[cheerioIndex][0] = new THREE.MeshBasicMaterial( {color: 0xe5a734, wireframe: wires });
-  materials[cheerioIndex][1] = new THREE.MeshLambertMaterial( {color: 0xe5a734, wireframe: wires });
+  materials[cheerioIndex][1] = new THREE.MeshLambertMaterial( {color: 0xe5a734, reflectivity: 1, wireframe: wires });
   materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[tableIndex] = new Array(3);
   materials[tableIndex][0] = new THREE.MeshBasicMaterial( {color: 0x056C24, wireframe: wires });
-  materials[tableIndex][1] = new THREE.MeshLambertMaterial( {color: 0x056C24, wireframe: wires });
+  materials[tableIndex][1] = new THREE.MeshLambertMaterial( {color: 0x056C24, reflectivity: 1, wireframe: wires });
   materials[tableIndex][2] = new THREE.MeshPhongMaterial( {color: 0x056C24, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[orangeIndex] = new Array(3);
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
-  materials[orangeIndex][1] = new THREE.MeshLambertMaterial( {color: 0xFF6E0E, wireframe: wires });
+  materials[orangeIndex][1] = new THREE.MeshLambertMaterial( {color: 0xFF6E0E, reflectivity: 1, wireframe: wires });
   materials[orangeIndex][2] = new THREE.MeshPhongMaterial( {color: 0xFF6E0E, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[orange_peIndex] = new Array(3);
   materials[orange_peIndex][0] = new THREE.MeshBasicMaterial( {color: 0x331900, wireframe: wires });
-  materials[orange_peIndex][1] = new THREE.MeshLambertMaterial( {color: 0x331900, wireframe: wires });
+  materials[orange_peIndex][1] = new THREE.MeshLambertMaterial( {color: 0x331900, reflectivity: 1, wireframe: wires });
   materials[orange_peIndex][2] = new THREE.MeshPhongMaterial( {color: 0x331900, wireframe: wires , shininess: 100, specular: 0x111111});
 }
 
@@ -309,7 +340,9 @@ function resizeOrtCamera(scale) {
 
 function render(){
   'use strict';
+  renderer.clear();
   renderer.render(scene, camera[cameraViewCar]);
+  renderer.render(nScene, nCam);
 }
 
 function init(){
@@ -320,11 +353,13 @@ function init(){
   document.body.appendChild(renderer.domElement);
   scale_width = window.innerWidth * scale;
   scale_height = window.innerHeight * scale * ratio;
+  renderer.autoClear = false;
 
   createScene();
   createCamera();
   createSun();
   createCandles(-30, 30, 30, 60);
+  addHUD();
 
   window.addEventListener('resize', onResize);
   window.addEventListener("keydown", onKeyDown);
@@ -443,6 +478,10 @@ function onKeyUp(e){
       break;
     case 65: //a
       toggleWireframe();
+      break;
+
+    case 72: //a
+      car.switchLights();
       break;
 
     case 67: // c
