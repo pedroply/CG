@@ -49,10 +49,8 @@ class Laranja extends GameEntity {
           + Math.pow((this.getPosition().y - obj.getPosition().y), 2);
             var radius_sum = Math.pow((this.getRadius() + obj.getRadius()/2), 2);
           if(radius_sum >= distance){
-            obj.setPosition(-20,0,30);
-            obj.desccelerate(0);
-            obj.setRotationX(0);
-            obj.setRotationY(0);
+            obj.die();
+
           }
         }
     }

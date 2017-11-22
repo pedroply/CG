@@ -32,6 +32,9 @@ var texture;
 var pause = 0;
 var pause_message;
 
+//             GAME OVER         //
+var over_message;
+
 //             LIVES             //
 
 
@@ -52,7 +55,10 @@ var orange_peIndex = 7;
 //           WIREFRAME         //
 var wires = false;
 
-var nScene, nCam;
+//           NEW HUD          //
+var nScene = new THREE.Scene(), nCam;
+
+var lives = new Array();
 
 
 
@@ -109,17 +115,10 @@ function createOutterBorder(num, spacing, starting, mat){
 }
 
 function addHUD() {
-	nScene = new THREE.Scene();
+
   createPauseMessage();
   createRestartMessage();
-
-	// Spaceship Sprites
-  this.lives = new Array();
-  this.lives.push(new Car(70, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(60, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(50, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(70, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(60, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+  var orange;
 
 
 	// Camera
@@ -127,13 +126,11 @@ function addHUD() {
 		nCam = new THREE.OrthographicCamera(window.innerWidth / scale_height, -window.innerWidth / scale_height, window.innerHeight / scale_height, -window.innerHeight / scale_height, 1, 100);
 	else
 		nCam = new THREE.OrthographicCamera(window.innerWidth / scale_width, -window.innerWidth / scale_width, window.innerHeight / scale_width, -window.innerHeight / scale_width, 1, 100);
+
 	nScene.add(nCam);
-
-	nScene.add(this.lives[0]);
-	nScene.add(this.lives[1]);
-	nScene.add(this.lives[2]);
   nScene.add(pause_message);
-
+  nScene.add(over_message);
+  replenishLives();
 	nCam.position.y = 50;
 	nCam.lookAt(nScene.position);
 }
@@ -150,13 +147,12 @@ function createScene(){
   'use strict';
   scene = new THREE.Scene();
   scene.add(new THREE.AxisHelper(10));
-  createTexture();
   createMaterials();
+  createTexture();
 
   var inner, outter;
-  car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
+  car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene, nScene, lives);
 
-  //scene.add(pause_message);
 
   createTable();
   numeroLaranjas(3, materials[orangeIndex][0], materials[orange_peIndex][0]);
@@ -259,42 +255,49 @@ function revertBasic(materials, basic, previous){
 }
 
 function createTexture(){
-  // table texture
   var loader = new THREE.TextureLoader();
   texture = loader.load( table_texture );
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
+  texture.minFilter = THREE.LinearFilter;
   texture.repeat.set( 4, 4 );
+  materials[tableIndex][0].map = texture;
+  materials[tableIndex][1].map = texture;
+  materials[tableIndex][2].map = texture;
 
 }
 
 function createPauseMessage(){
-  var geometry = new THREE.PlaneGeometry(50, 25, 0);
+  pause_message = new THREE.Object3D();
+  var geometry = new THREE.CubeGeometry(80, 50, 80);
      
   var texture = new THREE.TextureLoader().load(pause_texture);
   texture.minFilter = THREE.LinearFilter;
 
   var material = new THREE.MeshBasicMaterial({map: texture});
- 
-  pause_message = new THREE.Mesh(geometry, material);
+  var mesh = new THREE.Mesh(geometry, material);
+  pause_message.add(mesh);
   pause_message.visible = false;
   pause_message.rotation.x = -Math.PI/2;
-  pause_message.position.set(0,20,0);
+  pause_message.position.set(0,50,0);
+
 
 }
 
 function createRestartMessage(){
-  var geometry = new THREE.PlaneGeometry(50, 25, 0);
+  over_message = new THREE.Object3D();
+  var geometry = new THREE.CubeGeometry(80, 50, 80);
      
   var texture = new THREE.TextureLoader().load(over_texture);
   texture.minFilter = THREE.LinearFilter;
 
   var material = new THREE.MeshBasicMaterial({map: texture});
+  var mesh = new THREE.Mesh(geometry, material);
  
-  pause_message = new THREE.Mesh(geometry, material);
-  pause_message.visible = false;
-  pause_message.rotation.x = -Math.PI/2;
-  pause_message.position.set(0,20,0);
+  over_message.add(mesh);
+  over_message.visible = false;
+  over_message.rotation.x = -Math.PI/2;
+  over_message.position.set(0,50,0);
 }
 
 
@@ -325,12 +328,9 @@ function createMaterials(){
   materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[tableIndex] = new Array(3);
-  /*materials[tableIndex][0] = new THREE.MeshBasicMaterial( { map: texture});
-  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires, map: texture });
-  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {wireframe: wires , shininess: 100, specular: 0x111111, map: texture});*/
-  materials[tableIndex][0] = new THREE.MeshBasicMaterial( {color: 0x056C24, wireframe: wires });
-  materials[tableIndex][1] = new THREE.MeshLambertMaterial( {color: 0x056C24, reflectivity: 1, wireframe: wires });
-  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {color: 0x056C24, wireframe: wires , shininess: 100, specular: 0x111111});
+  materials[tableIndex][0] = new THREE.MeshBasicMaterial( { wireframe: wires});
+  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires});
+  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[orangeIndex] = new Array(3);
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
@@ -444,6 +444,34 @@ function pauseGame(pause){
   }
 }
 
+function replenishLives(){
+  lives.push(new Car(70, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(60, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(50, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(70, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(60, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  nScene.add(lives[0].car);
+  nScene.add(lives[1].car);
+  nScene.add(lives[2].car);
+  nScene.add(lives[3].car);
+  nScene.add(lives[4].car);
+}
+
+function gameOver(){
+  console.log(over_message.visible);
+  if (over_message.visible == true){
+    objs = new Array();
+    createScene();
+    createCamera();
+    createSun();
+    createCandles(-30, 30, 30, 60);
+    replenishLives();
+    over_message.visible = false;
+    clock.start();
+
+  }
+}
+
 function toggleWireframe() {
     wires = !wires;
     var material, i;
@@ -460,6 +488,11 @@ function animate() {
   elapsedTime = clock.getDelta ();
   var updated_pos_x;
   var updated_pos_z;
+  if (lives.length == 0){
+    clock.stop();
+    over_message.visible = true;
+
+  }
 
   if(gas)
 	  car.accelerate(elapsedTime);
@@ -566,10 +599,12 @@ function onKeyUp(e){
     case 84:  //t
 		  car.turbo = !car.turbo;
 		  break;
-    case 83:
+    case 83: //s
       pause = !pause;
       pauseGame(pause);
       break;
+    case 82: //r
+      gameOver();
     case 32:  //space
 		  car.handbrake = !car.handbrake;
 		  break;
