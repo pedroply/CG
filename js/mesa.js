@@ -22,6 +22,11 @@ var candles = new Array(5);
 var candles_on = 0;
 var sun_on = 1;
 
+//             TEXTURES          //
+var table_texture = "textures/table.png";
+//             LIVES             //
+
+
 //             MATERIALS         //
 var basic = 1;
 var active = 2;  // Phong
@@ -104,7 +109,7 @@ function createScene(){
   'use strict';
   scene = new THREE.Scene();
   scene.add(new THREE.AxisHelper(10));
-
+  createTexture();
   createMaterials();
 
   var inner, outter;
@@ -217,6 +222,16 @@ function revertBasic(materials, basic, previous){
   }*/
 }
 
+function createTexture(){
+  var texture = new THREE.TextureLoader().load(table_texture);
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(2,2);
+  materials[tableIndex] = new Array(3);
+  materials[tableIndex][0] = new THREE.MeshBasicMaterial( {wireframe: wires, map: texture});
+  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires, map: texture });
+  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {wireframe: wires , shininess: 100, specular: 0x111111, map: texture});
+}
+
 function createMaterials(){
   materials[carIndex] = new Array(3);
   materials[carIndex][0] = new THREE.MeshBasicMaterial( {color: 0xff0000, wireframe: wires });
@@ -242,11 +257,6 @@ function createMaterials(){
   materials[cheerioIndex][0] = new THREE.MeshBasicMaterial( {color: 0xe5a734, wireframe: wires });
   materials[cheerioIndex][1] = new THREE.MeshLambertMaterial( {color: 0xe5a734, wireframe: wires });
   materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 100, specular: 0x111111});
-
-  materials[tableIndex] = new Array(3);
-  materials[tableIndex][0] = new THREE.MeshBasicMaterial( {color: 0x056C24, wireframe: wires });
-  materials[tableIndex][1] = new THREE.MeshLambertMaterial( {color: 0x056C24, wireframe: wires });
-  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {color: 0x056C24, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[orangeIndex] = new Array(3);
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
@@ -350,10 +360,8 @@ function toggleWireframe() {
     wires = !wires;
     var material, i;
     for (i = 0; i < materials.length; i++) {
-      console.log(i);
         for (mat of materials[i]){
           mat.wireframe = wires;
-          console.log(mat);
         }
 
     }
@@ -364,9 +372,6 @@ function animate() {
   elapsedTime = clock.getDelta ();
   var updated_pos_x;
   var updated_pos_z;
-
-
-  //console.log(car.userData.step);
 
   if(gas)
 	  car.accelerate(elapsedTime);

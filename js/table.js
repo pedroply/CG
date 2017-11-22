@@ -20,6 +20,7 @@ class Table extends GameEntity{
     var geometry = new THREE.CubeGeometry(80, 10, 80);
     this.mesa_mesh = new THREE.Mesh(geometry, this.material);
     this.mesa_mesh.position.set(x,y,z);
+    this.mesa_mesh.castShadow = true;
     obj.add(this.mesa_mesh);
   }
 
