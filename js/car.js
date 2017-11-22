@@ -278,6 +278,12 @@ class Car extends GameEntity{
     this.velocidade[2] = -this.vel*Math.sin(this.car.rotation.y);
     this.car.position.x += this.velocidade[0]*deltaT;
     this.car.position.z += this.velocidade[2]*deltaT;
+
+    //console.log("xpos: ", this.car.position.x, "delta t: ", deltaT, "velocidade x: ", this.velocidade[0]);
+    if(this.car.position.x > 40 || this.car.position.x < -40)
+      this.die();
+    if(this.car.position.z > 40 || this.car.position.z < -40)
+      this.die();
   }
 
   treatCollision(obj){
