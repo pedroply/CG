@@ -53,7 +53,6 @@ var orange_peIndex = 7;
 var wires = false;
 
 var nScene, nCam;
-var pause, restart, sprite;
 
 
 
@@ -111,6 +110,8 @@ function createOutterBorder(num, spacing, starting, mat){
 
 function addHUD() {
 	nScene = new THREE.Scene();
+  createPauseMessage();
+  createRestartMessage();
 
 	// Spaceship Sprites
   this.lives = new Array();
@@ -131,6 +132,7 @@ function addHUD() {
 	nScene.add(this.lives[0]);
 	nScene.add(this.lives[1]);
 	nScene.add(this.lives[2]);
+  nScene.add(pause_message);
 
 	nCam.position.y = 50;
 	nCam.lookAt(nScene.position);
@@ -151,10 +153,10 @@ function createScene(){
   createTexture();
   createMaterials();
 
-  scene.add(pause_message);
-
   var inner, outter;
   car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
+
+  //scene.add(pause_message);
 
   createTable();
   numeroLaranjas(3, materials[orangeIndex][0], materials[orange_peIndex][0]);
@@ -259,21 +261,15 @@ function revertBasic(materials, basic, previous){
 function createTexture(){
   // table texture
   var loader = new THREE.TextureLoader();
-  texture = loader.load( "textures/table.png" );
+  texture = loader.load( table_texture );
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set( 4, 4 );
 
-  // pause texture
-  createPauseMessage();
-
-  // game over texture
-  over_texture = loader.load("textures/over.png");
-
 }
 
 function createPauseMessage(){
-  var geometry = new THREE.PlaneGeometry(80, 80, 0);
+  var geometry = new THREE.PlaneGeometry(50, 25, 0);
      
   var texture = new THREE.TextureLoader().load(pause_texture);
   texture.minFilter = THREE.LinearFilter;
@@ -282,6 +278,23 @@ function createPauseMessage(){
  
   pause_message = new THREE.Mesh(geometry, material);
   pause_message.visible = false;
+  pause_message.rotation.x = -Math.PI/2;
+  pause_message.position.set(0,20,0);
+
+}
+
+function createRestartMessage(){
+  var geometry = new THREE.PlaneGeometry(50, 25, 0);
+     
+  var texture = new THREE.TextureLoader().load(over_texture);
+  texture.minFilter = THREE.LinearFilter;
+
+  var material = new THREE.MeshBasicMaterial({map: texture});
+ 
+  pause_message = new THREE.Mesh(geometry, material);
+  pause_message.visible = false;
+  pause_message.rotation.x = -Math.PI/2;
+  pause_message.position.set(0,20,0);
 }
 
 
@@ -394,12 +407,11 @@ function init(){
   scale_width = window.innerWidth * scale;
   scale_height = window.innerHeight * scale * ratio;
   renderer.autoClear = false;
-
   createScene();
+  addHUD();
   createCamera();
   createSun();
   createCandles(-30, 30, 30, 60);
-  addHUD();
 
   window.addEventListener('resize', onResize);
   window.addEventListener("keydown", onKeyDown);
