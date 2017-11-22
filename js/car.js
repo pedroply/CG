@@ -2,7 +2,7 @@
 
 class Car extends GameEntity{
 
-  constructor(x, y, z, tam, carMat, wheelMat, cockpitMat, scene) {
+  constructor(x, y, z, tam, carMat, wheelMat, cockpitMat, scene, hud, lives) {
     'use strict';
     super();
     this.car = new THREE.Object3D();
@@ -41,6 +41,8 @@ class Car extends GameEntity{
     this.car.position.x = x;
     this.car.position.y = y;
     this.car.position.z = z;
+    this.hud = hud;
+    this.lives = lives;
   }
 
 
@@ -381,6 +383,14 @@ class Car extends GameEntity{
       }
       this.cockpit_mesh.material = this.cockpitMat;
     }
+  }
+
+  die(){
+    this.setPosition(-20,0,30);
+    this.desccelerate(0);
+    this.setRotationX(0);
+    this.setRotationY(0);
+    this.hud.remove(this.lives.pop().car);
   }
 
 }

@@ -39,8 +39,9 @@ var orange_peIndex = 7;
 //           WIREFRAME         //
 var wires = false;
 
-var nScene, nCam;
-var pause, restart, sprite;
+var nScene = new THREE.Scene(), nCam;
+
+var lives = new Array();
 
 
 
@@ -97,15 +98,13 @@ function createOutterBorder(num, spacing, starting, mat){
 }
 
 function addHUD() {
-	nScene = new THREE.Scene();
 
 	// Spaceship Sprites
-  this.lives = new Array();
-  this.lives.push(new Car(70, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(60, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(50, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(70, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
-  this.lives.push(new Car(60, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene));
+  lives.push(new Car(70, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(60, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(50, 0, -30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(70, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
+  lives.push(new Car(60, 0, -25, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], nScene, nScene, lives));
 
 
 	// Camera
@@ -115,9 +114,11 @@ function addHUD() {
 		nCam = new THREE.OrthographicCamera(window.innerWidth / scale_width, -window.innerWidth / scale_width, window.innerHeight / scale_width, -window.innerHeight / scale_width, 1, 100);
 	nScene.add(nCam);
 
-	nScene.add(this.lives[0]);
-	nScene.add(this.lives[1]);
-	nScene.add(this.lives[2]);
+	nScene.add(lives[0].car);
+	nScene.add(lives[1].car);
+	nScene.add(lives[2].car);
+	nScene.add(lives[3].car);
+	nScene.add(lives[4].car);
 
 	nCam.position.y = 50;
 	nCam.lookAt(nScene.position);
@@ -139,7 +140,7 @@ function createScene(){
   createMaterials();
 
   var inner, outter;
-  car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
+  car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene, nScene, lives);
 
   createTable();
   numeroLaranjas(3, materials[orangeIndex][0], materials[orange_peIndex][0]);
