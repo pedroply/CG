@@ -22,8 +22,16 @@ var candles = new Array(5);
 var candles_on = 0;
 var sun_on = 1;
 
-//             TEXTURES          //
-var table_texture = "textures/table.png";
+//             TEXTURES          //;
+var table_texture = 'textures/table.png';
+var pause_texture = 'textures/pause.png';
+var over_texture =  'textures/over.png';
+var texture;
+
+//             PAUSE             //
+var pause = 0;
+var pause_message;
+
 //             LIVES             //
 
 
@@ -112,6 +120,8 @@ function createScene(){
   createTexture();
   createMaterials();
 
+  scene.add(pause_message);
+
   var inner, outter;
   car = new Car(-20, 0, 30, 1, materials[carIndex][0], materials[wheelIndex][0], materials[cockpitIndex][0], scene);
 
@@ -128,7 +138,6 @@ function createCamera(){
   createOrtCamera();
   createPerspCamera();
   createBehindCamera();
-  //camera = new THREE.OrthographicCamera( 140 / - 2, 140 / 2, 81 / 2, 81 / - 2, 1, 1000);
 
 }
 
@@ -192,20 +201,20 @@ function candlesSwitch(num){
   var i;
   for (i = 0; i < 6; i++){
     if (num){
-        candles[i].intensity = 0.5;
+        candles[i].visible = true;
       }
     else{
-      candles[i].intensity = 0.00;
+      candles[i].visible = false;
     }
   }
 }
 
 function sunSwitch(num){
   if (num){
-    sun.intensity = 3;
+    sun.visible = true;
   }
   else{
-    sun.intensity = 0.00;
+    sun.visible = false;
   }
 }
 
@@ -214,23 +223,36 @@ function revertBasic(materials, basic, previous){
   for (i=0 ; i < objs.length; i++){
       objs[i].revertBasic(materials, basic, previous);
   }
-  /*if (basic){
-    mesa_mesh.material = materials[tableIndex][previous];
-  }
-  else{
-    mesa_mesh.material = materials[tableIndex][0];
-  }*/
 }
 
 function createTexture(){
-  var texture = new THREE.TextureLoader().load(table_texture);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(2,2);
-  materials[tableIndex] = new Array(3);
-  materials[tableIndex][0] = new THREE.MeshBasicMaterial( {wireframe: wires, map: texture});
-  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires, map: texture });
-  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {wireframe: wires , shininess: 100, specular: 0x111111, map: texture});
+  // table texture
+  var loader = new THREE.TextureLoader();
+  texture = loader.load( "textures/table.png" );
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set( 4, 4 );
+
+  // pause texture
+  createPauseMessage();
+
+  // game over texture
+  over_texture = loader.load("textures/over.png");
+
 }
+
+function createPauseMessage(){
+  var geometry = new THREE.PlaneGeometry(80, 80, 0);
+     
+  var texture = new THREE.TextureLoader().load(pause_texture);
+  texture.minFilter = THREE.LinearFilter;
+
+  var material = new THREE.MeshBasicMaterial({map: texture});
+ 
+  pause_message = new THREE.Mesh(geometry, material);
+  pause_message.visible = false;
+}
+
 
 function createMaterials(){
   materials[carIndex] = new Array(3);
@@ -257,6 +279,11 @@ function createMaterials(){
   materials[cheerioIndex][0] = new THREE.MeshBasicMaterial( {color: 0xe5a734, wireframe: wires });
   materials[cheerioIndex][1] = new THREE.MeshLambertMaterial( {color: 0xe5a734, wireframe: wires });
   materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 100, specular: 0x111111});
+
+  materials[tableIndex] = new Array(3);
+  materials[tableIndex][0] = new THREE.MeshBasicMaterial( { map: texture});
+  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires, map: texture });
+  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {wireframe: wires , shininess: 100, specular: 0x111111, map: texture});
 
   materials[orangeIndex] = new Array(3);
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
@@ -354,6 +381,17 @@ function checkCollisions(){
 
 function switchCamera(cameraToggle){
     cameraViewCar = cameraToggle-1;
+}
+
+function pauseGame(pause){
+  if (pause){
+    clock.stop();
+    pause_message.visible = true;
+  }
+  else{
+    clock.start();
+    pause_message.visible = false;
+  }
 }
 
 function toggleWireframe() {
@@ -474,6 +512,10 @@ function onKeyUp(e){
     case 84:  //t
 		  car.turbo = !car.turbo;
 		  break;
+    case 83:
+      pause = !pause;
+      pauseGame(pause);
+      break;
     case 32:  //space
 		  car.handbrake = !car.handbrake;
 		  break;
