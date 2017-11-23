@@ -23,7 +23,7 @@ var candles_on = 0;
 var sun_on = 1;
 
 //             TEXTURES          //;
-var table_texture = 'textures/table.png';
+var table_texture = 'textures/table_red.jpg';
 var pause_texture = 'textures/pause.png';
 var over_texture =  'textures/over.png';
 var texture;
@@ -210,15 +210,17 @@ function createCandles(starting_x, starting_z, space_x, space_z){
   var i, j = 0, spacing_top = starting_x, spacing_bot = starting_x;
   for (i = 0; i < space_x * 6; i += space_x){
     if (j < 3){
-      candles[j] = new THREE.PointLight(0xffffff, 0.00, 0, 1);
+      candles[j] = new THREE.PointLight(0xffffff, 0.3, 0, 1);
       candles[j].position.set(spacing_top, 6, starting_z);
+      candles[j].visible = false;
       scene.add(candles[j]);
       spacing_top += space_x;
       j++;
     }
     else{
-      candles[j] = new THREE.PointLight(0xffffff, 0.00, 0, 1);
+      candles[j] = new THREE.PointLight(0xffffff, 0.3, 0, 1);
       candles[j].position.set(spacing_bot, 6, starting_z - space_z);
+      candles[j].visible = false;
       scene.add(candles[j]);
       spacing_bot += space_x;
       j++;
@@ -260,7 +262,7 @@ function createTexture(){
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.minFilter = THREE.LinearFilter;
-  texture.repeat.set( 4, 4 );
+  texture.repeat.set( 2, 2 );
   materials[tableIndex][0].map = texture;
   materials[tableIndex][1].map = texture;
   materials[tableIndex][2].map = texture;
@@ -328,9 +330,9 @@ function createMaterials(){
   materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[tableIndex] = new Array(3);
-  materials[tableIndex][0] = new THREE.MeshBasicMaterial( { wireframe: wires});
+  materials[tableIndex][0] = new THREE.MeshBasicMaterial( {wireframe: wires});
   materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires});
-  materials[tableIndex][2] = new THREE.MeshPhongMaterial( {wireframe: wires , shininess: 100, specular: 0x111111});
+  materials[tableIndex][2] = new THREE.MeshPhongMaterial( { wireframe: wires , shininess: 100, specular: 0x111111});
 
   materials[orangeIndex] = new Array(3);
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
