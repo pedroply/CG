@@ -60,13 +60,13 @@ class Butter extends GameEntity{
         if (obj.getSpeed() > 0){
           if (this.inCollision){
             obj.stopFrontMovement();
-                obj.desccelerate(0);
+                obj.vel = 0;
             }
         }
         else if (obj.getSpeed() < 0){
           if (this.inCollision){
             obj.stopBackMovement();
-            obj.desccelerate(0);
+            obj.vel = 0;
           }
         }
       }

@@ -256,6 +256,7 @@ class Car extends GameEntity{
   }
 
   desccelerate(deltaT){
+  	//this.vel *= 55*deltaT;
     if(this.vel > 0){
       this.vel = this.vel - 20*deltaT;
       if(this.vel < 0)
