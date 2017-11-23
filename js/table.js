@@ -7,7 +7,7 @@ class Table extends GameEntity{
     super();
     this.table = new THREE.Object3D();
     this.material = mat;
-    this.addTableTop(this.table, 0, -5, 0);
+    this.addTableTop(this.table, 0, 0, 0);
 
     this.table.position.x = 0;
     this.table.position.y = 0;
@@ -17,9 +17,15 @@ class Table extends GameEntity{
 
   addTableTop(obj, x, y, z){
     'use strict';
+    /*
     var geometry = new THREE.CubeGeometry(80, 10, 80);
     this.mesa_mesh = new THREE.Mesh(geometry, this.material);
     console.log(this.material);
+    this.mesa_mesh.position.set(x,y,z);
+    obj.add(this.mesa_mesh);*/
+    var geometry = new THREE.PlaneGeometry(80, 80, 10, 10);
+    this.mesa_mesh = new THREE.Mesh(geometry, this.material);
+    this.mesa_mesh.rotation.x = -Math.PI/2;
     this.mesa_mesh.position.set(x,y,z);
     obj.add(this.mesa_mesh);
   }
