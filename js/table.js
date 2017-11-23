@@ -17,7 +17,6 @@ class Table extends GameEntity{
 
   addTableTop(obj, x, y, z){
     'use strict';
-
     var geometry = new THREE.CubeGeometry(80, 10, 80);
     this.mesa_mesh = new THREE.Mesh(geometry, this.material);
     console.log(this.material);

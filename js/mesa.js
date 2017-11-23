@@ -202,6 +202,7 @@ function createBehindCamera(){
 function createSun(){
   sun = new THREE.DirectionalLight(0xffffff, 3);
   sun.position.set(0,40,100);
+  sun.castShadow = true;
   scene.add(sun);
 }
 
@@ -212,6 +213,7 @@ function createCandles(starting_x, starting_z, space_x, space_z){
     if (j < 3){
       candles[j] = new THREE.PointLight(0xffffff, 0.3, 0, 1);
       candles[j].position.set(spacing_top, 6, starting_z);
+      candles[j].castShadow = true;
       candles[j].visible = false;
       scene.add(candles[j]);
       spacing_top += space_x;
@@ -220,6 +222,7 @@ function createCandles(starting_x, starting_z, space_x, space_z){
     else{
       candles[j] = new THREE.PointLight(0xffffff, 0.3, 0, 1);
       candles[j].position.set(spacing_bot, 6, starting_z - space_z);
+      candles[j].castShadow = true;
       candles[j].visible = false;
       scene.add(candles[j]);
       spacing_bot += space_x;
@@ -262,6 +265,7 @@ function createTexture(){
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.minFilter = THREE.LinearFilter;
+  texture.maxFilter = THREE.LinearFilter;
   texture.repeat.set( 5, 5 );
   materials[tableIndex][0].map = texture;
   materials[tableIndex][1].map = texture;
@@ -322,22 +326,22 @@ function createMaterials(){
   materials[butterIndex] = new Array(3);
   materials[butterIndex][0] = new THREE.MeshBasicMaterial( {color: 0xffd633, wireframe: wires });
   materials[butterIndex][1] = new THREE.MeshLambertMaterial( {color: 0xffd633, reflectivity: 1, wireframe: wires });
-  materials[butterIndex][2] = new THREE.MeshPhongMaterial( {color: 0xffd633, wireframe: wires , shininess: 100, specular: 0x111111});
+  materials[butterIndex][2] = new THREE.MeshPhongMaterial( {color: 0xffd633, wireframe: wires , shininess: 60, specular: 0x111111});
 
   materials[cheerioIndex] = new Array(3);
   materials[cheerioIndex][0] = new THREE.MeshBasicMaterial( {color: 0xe5a734, wireframe: wires });
   materials[cheerioIndex][1] = new THREE.MeshLambertMaterial( {color: 0xe5a734, reflectivity: 1, wireframe: wires });
-  materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 100, specular: 0x111111});
+  materials[cheerioIndex][2] = new THREE.MeshPhongMaterial( {color: 0xe5a734, wireframe: wires , shininess: 50, specular: 0x111111});
 
   materials[tableIndex] = new Array(3);
   materials[tableIndex][0] = new THREE.MeshBasicMaterial( {wireframe: wires});
-  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires});
-  materials[tableIndex][2] = new THREE.MeshPhongMaterial( { wireframe: wires , shininess: 100, specular: 0x111111});
+  materials[tableIndex][1] = new THREE.MeshLambertMaterial( { wireframe: wires, reflectivity: 1});
+  materials[tableIndex][2] = new THREE.MeshPhongMaterial( { wireframe: wires , shininess: 20, specular: 0x111111});
 
   materials[orangeIndex] = new Array(3);
   materials[orangeIndex][0] = new THREE.MeshBasicMaterial( {color: 0xFF6E0E, wireframe: wires });
   materials[orangeIndex][1] = new THREE.MeshLambertMaterial( {color: 0xFF6E0E, reflectivity: 1, wireframe: wires });
-  materials[orangeIndex][2] = new THREE.MeshPhongMaterial( {color: 0xFF6E0E, wireframe: wires , shininess: 100, specular: 0x111111});
+  materials[orangeIndex][2] = new THREE.MeshPhongMaterial( {color: 0xFF6E0E, wireframe: wires , shininess: 30, specular: 0x111111});
 
   materials[orange_peIndex] = new Array(3);
   materials[orange_peIndex][0] = new THREE.MeshBasicMaterial( {color: 0x331900, wireframe: wires });
@@ -356,7 +360,6 @@ function changeShading(){
   for (i=0 ; i < objs.length; i++){
       objs[i].changeLightMaterial(materials, active);
   }
-  //mesa_mesh.material = materials[tableIndex][active];
 }
 
 /*Main function for window resize*/
