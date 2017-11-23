@@ -69,7 +69,7 @@ class Cheerio extends GameEntity {
 
 	update(deltaT){
 		this.cheerio.position.x += this.velocidade[0]*deltaT;
-    	this.cheerio.position.z += this.velocidade[2]*deltaT;
+    this.cheerio.position.z += this.velocidade[2]*deltaT;
 		this.velocidade[0] *= 55*deltaT;
 		this.velocidade[2] *= 55*deltaT;
   }

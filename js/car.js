@@ -249,14 +249,23 @@ class Car extends GameEntity{
 
   accelerateBack(deltaT){
     if (this.collisionBack == 0){
-      this.vel -= 20*deltaT;
+      this.vel -= 30*deltaT;
       if(this.vel<-10)
     	  this.vel=-10;
       }
   }
 
   desccelerate(deltaT){
-    this.vel *= 55*deltaT;
+    if(this.vel > 0){
+      this.vel = this.vel - 20*deltaT;
+      if(this.vel < 0)
+        this.vel = 0;
+    }
+    else if(this.vel < 0){
+      this.vel = this.vel + 20*deltaT;
+      if(this.vel > 0)
+        this.vel = 0;
+    }
   }
 
   turnL(deltaT){
