@@ -232,31 +232,37 @@ function createCandles(starting_x, starting_z, space_x, space_z){
 }
 
 function candlesSwitch(num){
-  var i;
-  for (i = 0; i < 6; i++){
-    if (num){
-        candles[i].visible = true;
+  //if (!pause){
+    var i;
+    for (i = 0; i < 6; i++){
+      if (num){
+          candles[i].visible = true;
+        }
+      else{
+        candles[i].visible = false;
       }
-    else{
-      candles[i].visible = false;
     }
-  }
+  //}
 }
 
 function sunSwitch(num){
-  if (num){
-    sun.visible = true;
-  }
-  else{
-    sun.visible = false;
-  }
+  //if (!pause){
+    if (num){
+      sun.visible = true;
+    }
+    else{
+      sun.visible = false;
+    }
+  //}
 }
 
 function revertBasic(materials, basic, previous){
-  var i;
-  for (i=0 ; i < objs.length; i++){
-      objs[i].revertBasic(materials, basic, previous);
-  }
+  //if (!pause){
+    var i;
+    for (i=0 ; i < objs.length; i++){
+        objs[i].revertBasic(materials, basic, previous);
+    }
+  //}
 }
 
 function createTexture(){
@@ -350,16 +356,18 @@ function createMaterials(){
 }
 
 function changeShading(){
-  var i;
-  if (active == 1){
-    active = 2;
-  }
-  else if (active == 2){
-    active = 1;
-  }
-  for (i=0 ; i < objs.length; i++){
-      objs[i].changeLightMaterial(materials, active);
-  }
+  //if (!pause){
+    var i;
+    if (active == 1){
+      active = 2;
+    }
+    else if (active == 2){
+      active = 1;
+    }
+    for (i=0 ; i < objs.length; i++){
+        objs[i].changeLightMaterial(materials, active);
+    }
+  //}
 }
 
 /*Main function for window resize*/
@@ -435,7 +443,9 @@ function checkCollisions(){
 }
 
 function switchCamera(cameraToggle){
+  //if (!pause){
     cameraViewCar = cameraToggle-1;
+  //}
 }
 
 function pauseGame(pause){
@@ -478,6 +488,7 @@ function gameOver(){
 }
 
 function toggleWireframe() {
+  //if (!pause){
     wires = !wires;
     var material, i;
     for (i = 0; i < materials.length; i++) {
@@ -486,6 +497,7 @@ function toggleWireframe() {
         }
 
     }
+  //}
 }
 
 function animate() {
@@ -577,7 +589,9 @@ function onKeyUp(e){
       break;
 
     case 72: //h
-      car.switchLights();
+      //if (!pause){
+        car.switchLights();
+      //}
       break;
 
     case 67: // c
