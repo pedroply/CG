@@ -17,6 +17,8 @@ class Cheerio extends GameEntity {
 		scene.add(this.cheerio);
 		this.velocidade[0] = 0;
 		this.velocidade[2] = 0;
+		this.vel = 0;
+		this.rotation = 0;
 	}
 
 	getPosition(){
@@ -59,6 +61,11 @@ class Cheerio extends GameEntity {
 					aux[2] = aux[6]*Math.sqrt(Math.pow(obj.getVelocity()[0],2)+Math.pow(obj.getVelocity()[2],2));
 					this.velocidade[0] = aux[0];
 					this.velocidade[2] = aux[2];
+					this.vel = Math.sqrt(Math.pow(aux[0],2)+Math.pow(aux[2],2));
+					if(aux[0] < 0 && aux[2] < 0)
+						this.rotation = Math.atan(aux[2]/aux[0])+Math.PI;
+					else
+						this.rotation = Math.atan(aux[2]/aux[0]);
 					var lenght_inside = obj.getRadius()/2+this.getRadius()-Math.sqrt(Math.pow(aux[1],2)+Math.pow(aux[3],2));
 					this.cheerio.position.x += aux[5]*lenght_inside;
 			    this.cheerio.position.z += aux[6]*lenght_inside;
@@ -70,8 +77,18 @@ class Cheerio extends GameEntity {
 	update(deltaT){
 		this.cheerio.position.x += this.velocidade[0]*deltaT;
     this.cheerio.position.z += this.velocidade[2]*deltaT;
-		this.velocidade[0] *= 55*deltaT;
-		this.velocidade[2] *= 55*deltaT;
+		if(this.vel > 0){
+      this.vel = this.vel - 20*deltaT;
+      if(this.vel < 0)
+        this.vel = 0;
+    }
+    else if(this.vel < 0){
+      this.vel = this.vel + 20*deltaT;
+      if(this.vel > 0)
+        this.vel = 0;
+    }
+		this.velocidade[0] = this.vel*Math.cos(this.rotation);
+    this.velocidade[2] = this.vel*Math.sin(this.rotation);
   }
 
 	getVelocity(){
