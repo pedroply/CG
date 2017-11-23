@@ -6,7 +6,6 @@ class Car extends GameEntity{
     'use strict';
     super();
     this.car = new THREE.Object3D();
-    //this.car.add(new THREE.AxisHelper(10));
     this.velocidade = new Array();
     this.vel = 0;
     this.turbo = false;
@@ -220,6 +219,7 @@ class Car extends GameEntity{
     spotLight.shadow.camera.near = 500;
     spotLight.shadow.camera.far = 4000;
     spotLight.shadow.camera.fov = 30;
+    spotLight.visible = false;
 
     this.lights[this.lights.length] = spotLight;
     obj.add( spotLight );
@@ -256,7 +256,6 @@ class Car extends GameEntity{
   }
 
   desccelerate(deltaT){
-  	//this.vel *= 55*deltaT;
     if(this.vel > 0){
       this.vel = this.vel - 20*deltaT;
       if(this.vel < 0)
@@ -363,11 +362,11 @@ class Car extends GameEntity{
 
   switchLights(){
     for(var i = 0; i < this.lights.length; i++){
-      if(this.lights[i].intensity != 0){
-        this.lights[i].intensity = 0;
+      if(this.lights[i].visible){
+        this.lights[i].visible = false;
       }
       else{
-        this.lights[i].intensity = 10;
+        this.lights[i].visible = true;
       }
     }
   }

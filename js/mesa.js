@@ -23,7 +23,7 @@ var candles_on = 0;
 var sun_on = 1;
 
 //             TEXTURES          //;
-var table_texture = 'textures/table_red.jpg';
+var table_texture = 'textures/table_blue.jpg';
 var pause_texture = 'textures/pause.png';
 var over_texture =  'textures/over.png';
 var texture;
@@ -262,7 +262,7 @@ function createTexture(){
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.minFilter = THREE.LinearFilter;
-  texture.repeat.set( 2, 2 );
+  texture.repeat.set( 5, 5 );
   materials[tableIndex][0].map = texture;
   materials[tableIndex][1].map = texture;
   materials[tableIndex][2].map = texture;
@@ -573,7 +573,7 @@ function onKeyUp(e){
       toggleWireframe();
       break;
 
-    case 72: //a
+    case 72: //h
       car.switchLights();
       break;
 
